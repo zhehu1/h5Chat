@@ -2,10 +2,8 @@
 .AppleDouble
 .LSOverride
 
-
 #WebStrom ignore
 .idea
-
 
 #node modules
 node_modules
