@@ -50,7 +50,7 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest(myPath.jsDest))
         .pipe(rename({ extname: '.min.js' }))
         .pipe(uglify())
-        .pipe(gulp.dest(myPath.jsDest));
+        .pipe(gulp.dest(myPath.jsDest+"/min"));
 });
 
 gulp.task('default', function() {
