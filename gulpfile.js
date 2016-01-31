@@ -10,12 +10,13 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var minfiyCss = require('gulp-minify-css');
+var stylish = require('jshint-stylish');
 
 var myPath = {
     jsDevDest : "./public_dev/js",
     jsDest : "./public/js",
-    sassDevDest : './public_dev/stylesheets',
-    sassDest : "./public/stylesheets",
+    sassDevDest : './public_dev/css',
+    sassDest : "./public/css",
     imagesDevDest : "./public_dev/images",
     imagesDest : "./public/images"
 };
@@ -38,10 +39,12 @@ gulp.task('sass', function() {
 gulp.task('lint',function(){
    gulp.src(myPath.jsDevDest+"/*.js")
        .pipe(jshint())
-       .pipe(jshint.reporter('default'));
+       .pipe(jshint.reporter(stylish));
 });
 
-// 合并，压缩文件
+/**
+ *  压缩js文件
+ */
 gulp.task('scripts', function() {
     gulp.src(myPath.jsDevDest+'/*.js')
         .pipe(gulp.dest(myPath.jsDest))
@@ -50,13 +53,11 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest(myPath.jsDest));
 });
 
-
-
 gulp.task('default', function() {
     gulp.run('lint', 'sass', 'scripts');
 
     // 监听js文件变化
-    gulp.watch('./js/*.js', function(){
+    gulp.watch(myPath.jsDevDest+'/*.js', function(){
         gulp.run('lint', 'scripts');
     });
 
@@ -64,4 +65,5 @@ gulp.task('default', function() {
     gulp.watch(myPath.sassDevDest+'/*.scss', function(){
         gulp.run('sass');
     });
+
 });
