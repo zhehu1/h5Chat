@@ -14,10 +14,12 @@
 //      function socketInit(){
 //          socket.emit('foo', 'hello World');//发送一个名为foo的事件，并且传递一个字符串数据‘hello’
 //      }
-      var socket = io('http://localhost:3001');
-      socket.on('private message', function (data) {
+
+      var socket = io.connect('http://localhost:3001');
+      socket.on('private', function (data) {
           console.log(data);
-          socket.emit('private message', { my: 'data' });
+          socket.emit('private123', { message: 'data',target:'target' });
       });
+
   </script>
 </html>
