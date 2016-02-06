@@ -12,6 +12,8 @@
     "ejs": "~2.3.1",
     "express": "~4.12.4",
     "morgan": "~1.5.3",
+    "mysql": "^2.10.2",
+    "mysql-queues": "^1.0.0",
     "serve-favicon": "~2.2.1",
     "socket.io": "^1.4.5"
   },
