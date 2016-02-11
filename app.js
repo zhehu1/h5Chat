@@ -8,30 +8,15 @@ var bodyParser = require('body-parser');
 var mySocket =new require('./src/mySocket');
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
-//数据库连接
-var mySqlConn = require('./src/mysql/mysql-conn');
-
-mySqlConn.pool.getConnection(function(err,connection){
-  //错误处理
-  if(err){
-    callback(true);
-    return ;
-  }
-
-  //验证用户名密码的正确性
-  connection.query('select * from h5Chat_login',function(err,result){
-    //错误处理
-    if(err){
-      callback(true);
-      //connection.release();
-      return ;
-    }
-    //callback(false,result);
-    console.log(result);
-  });
-  connection.release();
-})
+var SqlBean = require('./src/mysql/sqlBean');
+var sqlBean = new SqlBean();
+//sqlBean.and("uId",'1').query(function(err,result){
+//    console.log(result.length);
+//});
+//
+//sqlBean.insertProp('uId','3').insertProp('username','123456').insertProp('password','123456').insert(function(err,result){
+//  console.log(result.length);
+//});
 
 //初始化自定义socket
 var socket = new mySocket();

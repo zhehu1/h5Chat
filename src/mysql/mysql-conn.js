@@ -27,6 +27,6 @@ var conf = {
      }
 };
 
-var pool = mysql.createPool(conf.mysql);
+var pool = mysql.createPool(conf.mysqlDev);
 
 exports.pool = pool;

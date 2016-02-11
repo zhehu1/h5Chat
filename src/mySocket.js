@@ -13,20 +13,6 @@ var mySocket = function(){};
  */
 module.exports = mySocket;
 
-var k= {
-    a : function(){
-        setTimeout(function(){
-            console.log("1234")
-        },1000)
-    },
-    b : function(){
-        console.log("b");
-    }
-};
-
-k.a();
-k.b();
-
 mySocket.prototype.init = function(port){
     socketIo = socketIo.listen(port || 3001);
     //socket部分
