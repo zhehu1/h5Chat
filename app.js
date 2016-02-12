@@ -18,6 +18,7 @@ var sqlBean = new SqlBean();
 //  console.log(result.length);
 //});
 
+
 //初始化自定义socket
 var socket = new mySocket();
 socket.init();
