@@ -15,6 +15,7 @@
 //          socket.emit('foo', 'hello World');//发送一个名为foo的事件，并且传递一个字符串数据‘hello’
 //      }
 
+
       var socket = io.connect('http://localhost:3001');
       socket.on('private', function (data) {
           console.log(data);
