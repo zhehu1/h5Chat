@@ -10,14 +10,6 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var SqlBean = require('./src/mysql/sqlBean');
 var sqlBean = new SqlBean();
-//sqlBean.and("uId",'1').query(function(err,result){
-//    console.log(result.length);
-//});
-//
-//sqlBean.insertProp('uId','3').insertProp('username','123456').insertProp('password','123456').insert(function(err,result){
-//  console.log(result.length);
-//});
-
 
 //初始化自定义socket
 var socket = new mySocket();

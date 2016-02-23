@@ -6,8 +6,11 @@
     <script src="/js/min/socket.io.min.js"></script>
   </head>
   <body>
-    <h1 onclick="socketInit()"><%= title %></h1>
+    <input type="text">
+    <button type="button">确认</button>
+    <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+
   </body>
   <script type="text/javascript">
 //      var socket=io.connect("http://localhost:3001");//与服务器进行连接
@@ -15,41 +18,18 @@
 //          socket.emit('foo', 'hello World');//发送一个名为foo的事件，并且传递一个字符串数据‘hello’
 //      }
 
-
       var socket = io.connect('http://localhost:3001');
       socket.on('private', function (data) {
           console.log(data);
           socket.emit('private123', { message: 'data',target:'target' });
       });
 
-//登录实体类
-var loginBean = {
-    uId:'',
-    username:'',
-    password:'',
-    getUId : function(){
-        return this.uId;
-    },
-    setUId : function(uId){
-        this.uId = uId;
-    },
-    getUsername : function(){
-        return this.username;
-    },
-    setUsername : function(username){
-        this.username = username;
-    },
-    getPassword : function(){
-        return this.password;
-    },
-    setPassword : function(password){
-        this.password = password;
-    }
-};
+      socket.on(socket.id,function(data){
+          console.log(data);
+      })
 
-
-var arr = [];
-      for(var key in loginBean){
+      var arr = [];
+        for(var key in loginBean){
           arr.push(key);
           console.log(key+":"+typeof key);
       }

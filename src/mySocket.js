@@ -20,14 +20,23 @@ mySocket.prototype.init = function(port){
         //接收并处理客户端发送的foo事件
         socket.emit('private', { will: 'be received by everyone'});
 
-        socket.on('private123', function (from) {
+        socket.on("private123",function(data){
+            console.log(socket.id +":connection");
+            //console.log(socket.id);
+            console.log('I received a private message by ',data);
+            console.log('I received a private message by '+data.target +" say:"+data.message);
+        })
+
+        socket.on('msg', function (from) {
             console.log(socket.id +":connection");
             //console.log(socket.id);
             console.log('I received a private message by ',from);
             console.log('I received a private message by '+from.target +" say:"+from.message);
         });
 
-        socket.on('disconnect', function () {
+        socket.on('disconnect', function (d) {
+            console.log("disconnect");
+            console.log(d);
             socket.emit('user disconnected');
         });
     });

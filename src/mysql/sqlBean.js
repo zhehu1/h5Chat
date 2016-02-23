@@ -1,6 +1,17 @@
 /**
  * Created by vuji on 16/2/6.
+ *
+ * 调用方式
+ * sqlBean.and("uId",'1').query(function(err,result){
+ *      console.log(result.length);
+ * });
+ *
+ * sqlBean.insertProp('uId','3').insertProp('username','123456').insertProp('password','123456').insert(function(err,result){
+ *      console.log(result.length);
+ * });
  */
+
+
 
 var mysql = require('mysql');
 var mysqlConn = require('./mysql-conn');
