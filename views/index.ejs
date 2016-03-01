@@ -2,14 +2,21 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/css/min/style.min.css' />
-    <script src="/js/min/socket.io.min.js"></script>
+    <link rel='stylesheet' href='/css/style.min.css' />
+    <script src="/js/socket.io.min.js"></script>
   </head>
   <body>
-    <input type="text">
-    <button type="button">确认</button>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <div class="body-bg"></div>
+    <div class="left-box">
+        <input type="text">
+        <button type="button">确认</button>
+    </div>
+    <div class="mid-box">
+
+    </div>
+    <div class="right-box">
+
+    </div>
 
   </body>
   <script type="text/javascript">
@@ -29,10 +36,10 @@
       })
 
       var arr = [];
-        for(var key in loginBean){
-          arr.push(key);
-          console.log(key+":"+typeof key);
-      }
+//        for(var key in loginBean){
+//          arr.push(key);
+//          console.log(key+":"+typeof key);
+//      }
 
   </script>
 </html>

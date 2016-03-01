@@ -1,6 +1,63 @@
+html {
+  font-size: 62.5%; }
+
 body {
-  padding: 50px;
+  font-size: 1.4rem;
+  padding: 0;
+  margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
+
+.body-bg {
+  background: url("../images/bg.jpg") no-repeat left top;
+  background-size: cover;
+  position: absolute;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  -webkit-filter: blur(2px);
+  /* Chrome, Opera */
+  -moz-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px); }
 
 a {
   color: #00B7FF; }
+
+.float-left, .left-box, .mid-box, .right-box {
+  float: left; }
+
+.left-box {
+  width: 10vw;
+  height: 100vh;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #fff;
+  background-color: rgba(28, 175, 226, 0.8);
+  display: block; }
+
+.left-box .icon {
+  border: 1px solid #fff;
+  background-color: rgba(28, 175, 226, 0.8); }
+
+.left-box .icon.active {
+  background-color: #fff; }
+
+.mid-box {
+  width: 24vw;
+  height: 100vh;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-right: 1px solid #ccc; }
+
+.right-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 66vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: block; }

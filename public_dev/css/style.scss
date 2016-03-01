@@ -1,8 +1,89 @@
+$defaultFont: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+$leftBgColor: rgba(28,175,226,.8);
+$leftFgColor: #fff;
+@mixin widthAndHeight($width,$height){
+  width: $width;
+  height: $height;
+}
+
+@mixin box-sizing ($sizing) {
+  -webkit-box-sizing:$sizing;
+  -moz-box-sizing:$sizing;
+  box-sizing:$sizing;
+}
+
+@mixin center-block {
+  margin-left:auto;
+  margin-right:auto;
+}
+
+@mixin blur($blur){
+  -webkit-filter: blur($blur); /* Chrome, Opera */
+  -moz-filter: blur($blur);
+  -ms-filter: blur($blur);
+  filter: blur($blur);
+}
+
+html{
+  font-size: 62.5%;
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-size:1.4rem;
+  padding:0;
+  margin:0;
+  font: $defaultFont;
+}
+
+.body-bg{
+  background: url("../images/bg.jpg") no-repeat left top;
+  background-size: cover;
+  position: absolute;
+  z-index: -1;
+  @include widthAndHeight(100vw,100vh);
+  @include blur(2px);
 }
 
 a {
   color: #00B7FF;
+}
+
+.float-left{
+  float: left;
+}
+
+.left-box{
+  @include widthAndHeight(10vw,100vh);
+  @include box-sizing(border-box);
+  @extend .float-left;
+  color: $leftFgColor;
+  background-color: $leftBgColor;
+  display: block;
+}
+
+.left-box .icon{
+  border:1px solid $leftFgColor;
+  background-color: $leftBgColor;
+}
+
+.left-box .icon.active{
+  background-color: $leftFgColor;
+}
+
+.mid-box{
+  @include widthAndHeight(24vw,100vh);
+  @extend .float-left;
+  @include box-sizing(border-box);
+  display: block;
+  background-color: rgba(255,255,255,.8);
+  border-right:1px solid #ccc;
+}
+
+.right-box{
+  @extend .float-left;
+  @include box-sizing(border-box);
+  @include widthAndHeight(66vw,100vh);
+  background-color: rgba(255,255,255,.7);
+  display: block;
 }

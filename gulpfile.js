@@ -11,6 +11,7 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var minfiyCss = require('gulp-minify-css');
 var stylish = require('jshint-stylish');
+var imagemin = require('gulp-imagemin');
 
 var myPath = {
     jsDevDest : "./public_dev/js",
@@ -31,7 +32,7 @@ gulp.task('sass', function() {
         .pipe(gulp.dest(myPath.sassDest))
         .pipe(minfiyCss({compatibility: 'ie8'}))
         .pipe(rename({ extname: '.min.css' }))
-        .pipe(gulp.dest(myPath.sassDest+"/min"));
+        .pipe(gulp.dest(myPath.sassDest));
 });
 
 /**
@@ -51,11 +52,20 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest(myPath.jsDest))
         .pipe(rename({ extname: '.min.js' }))
         .pipe(uglify())
-        .pipe(gulp.dest(myPath.jsDest+"/min"));
+        .pipe(gulp.dest(myPath.jsDest));
+});
+
+/**
+ * 图片压缩
+ */
+gulp.task('imagemin',function(){
+    gulp.src(myPath.imagesDevDest+"/**")
+        .pipe(imagemin())
+        .pipe(gulp.dest(myPath.imagesDest));
 });
 
 gulp.task('default', function() {
-    gulp.run('lint', 'sass', 'scripts');
+    gulp.run('lint', 'sass', 'scripts','imagemin');
 
     // 监听js文件变化
     gulp.watch(myPath.jsDevDest+'/*.js', function(){
@@ -67,4 +77,7 @@ gulp.task('default', function() {
         gulp.run('sass');
     });
 
+    gulp.watch(myPath.imagesDevDest+'/**', function(){
+        gulp.run('imagemin');
+    });
 });
