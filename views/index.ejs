@@ -4,15 +4,18 @@
     <title><%= title %></title>
     <link rel='stylesheet' href='/css/style.min.css' />
     <script src="/js/socket.io.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
   </head>
   <body>
     <div class="body-bg"></div>
     <div class="left-box">
-        <input type="text">
-        <button type="button">确认</button>
+        <input type="text" name="username" placeholder="我的名称">
+        <button type="button" id="setName">确定</button>
     </div>
     <div class="mid-box">
-
+        <input type="text" name="to" placeholder="对方名称">
+        <input type="text" name="message" placeholder="消息内容">
+        <button type="button" id="sendMsg">发送</button>
     </div>
     <div class="right-box">
 
@@ -25,17 +28,60 @@
 //          socket.emit('foo', 'hello World');//发送一个名为foo的事件，并且传递一个字符串数据‘hello’
 //      }
 
-      var socket = io.connect('http://localhost:3001');
-      socket.on('private', function (data) {
-          console.log(data);
-          socket.emit('private123', { message: 'data',target:'target' });
-      });
+    (function($){
+        var socket = io.connect('http://localhost:3001');
+        var uName = "";
+        $("#setName").click(function(){
+            var username = $("input[name='username']").val().trim();
+            if(username!=""){
+                uName = username;
+                console.log(uName);
 
-      socket.on(socket.id,function(data){
-          console.log(data);
-      })
+                socket.emit("login",uName);
 
-      var arr = [];
+
+                    socket.on(uName, function (data) {
+                        console.log(data);
+                        $(".right-box").append("<p>"+data.from+":"+data.message+"</p>")
+                    });
+
+
+                    socket.on("test", function (data) {
+                        $(".right-box").append("<p>test:"+data.message+"</p>")
+                        console.log("test",data);
+                    });
+
+//                })
+            }else{
+                alert("请输入用户名后再试");
+            }
+        });
+
+        $("#sendMsg").click(function(){
+            var toName = $("input[name='to']").val().trim();
+            var message = $("input[name='message']").val().trim();
+            console.log(uName,toName,message);
+            if(toName == ""){
+                alert("对方名称不能为空!");
+            }else if(message == ""){
+                alert("消息不能为空!")
+            }else if(uName == ""){
+                alert("我的名称不能为空!");
+            }else{
+                socket.emit("message", { message: message,target:toName,from:uName });
+            }
+        })
+
+//        function
+    }(jQuery));
+
+
+
+//      socket.on(socket.id,function(data){
+//          console.log(data);
+//      })
+
+//      var arr = [];
 //        for(var key in loginBean){
 //          arr.push(key);
 //          console.log(key+":"+typeof key);

@@ -3,9 +3,10 @@
  */
 var socketIo = require('socket.io')();
 
-socketIo.serveClient(false);
-
 var mySocket = function(){};
+
+
+var users = {};
 
 /**
  * module export
@@ -18,20 +19,24 @@ mySocket.prototype.init = function(port){
     //socket部分
     socketIo.on('connection', function(socket) {
         //接收并处理客户端发送的foo事件
-        socket.emit('private', { will: 'be received by everyone'});
+        //socket.emit('private', { will: 'be received by everyone'});
 
-        socket.on("private123",function(data){
-            console.log(socket.id +":connection");
-            //console.log(socket.id);
-            console.log('I received a private message by ',data);
-            console.log('I received a private message by '+data.target +" say:"+data.message);
-        })
+        //socket.on("private123",function(data){
+        //    console.log(socket.id +":connection");
+        console.log(socket);
+            //console.log('I received a private message by ',data);
+            //console.log('I received a private message by '+data.target +" say:"+data.message);
+        //})
 
-        socket.on('msg', function (from) {
-            console.log(socket.id +":connection");
-            //console.log(socket.id);
-            console.log('I received a private message by ',from);
-            console.log('I received a private message by '+from.target +" say:"+from.message);
+        socket.on("login",function(data){
+            users[data] = socket;
+            console.log(users);
+        });
+
+        socket.on('message', function (from) {
+            console.log(from,from.target);
+            //socket.emit(from.target, from);
+            users[from.target].emit(from.target, from);
         });
 
         socket.on('disconnect', function (d) {
