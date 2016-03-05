@@ -26,28 +26,38 @@
 #### 运行方式：
 
 1.克隆仓库
-
-`git clone https://git.coding.net/vuji/HTML5Chat.git`
+```
+git clone https://git.coding.net/vuji/HTML5Chat.git
+```
 
 2.安装nodejs环境
 
-[http://nodejs.cn](http://nodejs.cn)
+地址：[http://nodejs.cn](http://nodejs.cn)
 
 3.全局安装gulp
-
-`npm install --global gulp`
+```
+npm install --global gulp
+```
 
 4.安装node_modules
-
-`cd HTML5Chat-master && npm install`
+```
+cd HTML5Chat-master && npm install
+```
 
 6.使用gulp编译sass文件、压缩css、js等文件
-
-`gulp`
+```
+gulp
+```
 
 7.运行项目
+```
+npm start
+```
 
-`npm start`
+8.查看运行结果
+
+地址：[http://localhost:3000](http://localhost:3000)
+
 
 
 
