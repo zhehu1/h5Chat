@@ -13,6 +13,17 @@
 | 数据库 |  mongodb |
 
 
+| gulp插件 | 作用 |
+|----: |:--------|
+| gulp-sass | sass文件编译 |
+| gulp-minify-css | css文件压缩 |
+| gulp-jshint | js语法检查 | 
+| jshint-stylish | js语法检查显示样式 | 
+| gulp-uglify | js文件压缩 | 
+| gulp-concat | 文件合并 | 
+| gulp-rename | 文件重命名 |
+| gulp-imagemin | 图片压缩 | 
+
 
 #### 功能：
 1. 一对一聊天
