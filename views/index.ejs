@@ -29,7 +29,7 @@
 //      }
 
     (function($){
-        var socket = io.connect('http://'+window.location.hostname+':3001');
+        var socket = io();
         var uName = "";
         $("#setName").click(function(){
             var username = $("input[name='username']").val().trim();
@@ -41,7 +41,7 @@
 
 
                     socket.on(uName, function (data) {
-                        console.log(data);
+                        console.log(uName,data);
                         $(".right-box").append("<p>"+data.from+":"+data.message+"</p>")
                     });
 

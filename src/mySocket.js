@@ -30,7 +30,7 @@ mySocket.prototype.init = function(port){
 
         socket.on("login",function(data){
             users[data] = socket;
-            console.log(users);
+            console.log(data.from,"login");
         });
 
         socket.on('message', function (from) {

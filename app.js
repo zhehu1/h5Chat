@@ -4,16 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var mySocket =new require('./src/mySocket');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var SqlBean = require('./src/mysql/sqlBean');
 var sqlBean = new SqlBean();
-
-//初始化自定义socket
-var socket = new mySocket();
-socket.init();
 
 var app = express();
 
