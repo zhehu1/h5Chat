@@ -29,7 +29,7 @@
 //      }
 
     (function($){
-        var socket = io.connect('http://'+window.location.host+':3001');
+        var socket = io.connect('http://'+window.location.hostname+':3001');
         var uName = "";
         $("#setName").click(function(){
             var username = $("input[name='username']").val().trim();
