@@ -2,11 +2,14 @@
 .AppleDouble
 .LSOverride
 
+
+
 #WebStrom ignore
 .idea
 
-#node modules
+#npm ignore
 node_modules
+npm-debug.log
 
 # Icon must end with two \r
 Icon
