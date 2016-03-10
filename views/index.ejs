@@ -1,74 +1,163 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/css/style.min.css' />
-    <script src="/js/socket.io.min.js"></script>
-    <script src="/js/jquery.min.js"></script>
-  </head>
-  <body>
+    <link rel='stylesheet' href='/css/style.min.css'/>
+    <link rel="stylesheet" href="/assets/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/assets/css/amazeui.flat.min.css"/>
+</head>
+<body>
+<div class="container">
     <div class="body-bg"></div>
     <div class="left-box">
-        <input type="text" name="username" placeholder="我的名称">
-        <button type="button" id="setName">确定</button>
+        <img class="am-img-thumbnail am-circle myPic" src="/images/example1.jpg"/>
     </div>
     <div class="mid-box">
-        <input type="text" name="to" placeholder="对方名称">
-        <input type="text" name="message" placeholder="消息内容">
-        <button type="button" id="sendMsg">发送</button>
+        <ul class="am-list">
+            <li class="active">
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+            <li>
+                <img class="list-img am-circle" src="/images/example1.jpg" alt="" style="vertical-align: middle">
+                <span href="#">23523443563546356546</span>
+            </li>
+
+        </ul>
+
     </div>
     <div class="right-box">
+        <header class="right-top">
+            234567
+        </header>
+        <div class="right-middle">
+            <ul class="am-list">
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+                <li><a href="#">列表内容</a></li>
+            </ul>
+        </div>
+        <footer class="right-bottom">
+            <nav class="am-btn-toolbar">
+                <ul class="tool-list">
+                    <li>表情</li>
+                    <li>图片</li>
+                    <li>文件</li>
+                </ul>
+            </nav>
+            <div class="textInput">
+                <textarea name="" id="">
 
+                </textarea>
+            </div>
+        </footer>
     </div>
+</div>
+</body>
+<script src="/js/socket.io.min.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript">
+    //      var socket=io.connect("http://localhost:3001");//与服务器进行连接
+    //      function socketInit(){
+    //          socket.emit('foo', 'hello World');//发送一个名为foo的事件，并且传递一个字符串数据‘hello’
+    //      }
 
-  </body>
-  <script type="text/javascript">
-//      var socket=io.connect("http://localhost:3001");//与服务器进行连接
-//      function socketInit(){
-//          socket.emit('foo', 'hello World');//发送一个名为foo的事件，并且传递一个字符串数据‘hello’
-//      }
-
-    (function($){
+    (function ($) {
         var socket = io();
         var uName = "";
-        $("#setName").click(function(){
+        $("#setName").click(function () {
             var username = $("input[name='username']").val().trim();
-            if(username!=""){
+            if (username != "") {
                 uName = username;
                 console.log(uName);
 
-                socket.emit("login",uName);
+                socket.emit("login", uName);
+
+                socket.on(uName, function (data) {
+                    console.log(uName, data);
+                    $(".right-box").append("<p>" + data.from + ":" + data.message + "</p>")
+                });
 
 
-                    socket.on(uName, function (data) {
-                        console.log(uName,data);
-                        $(".right-box").append("<p>"+data.from+":"+data.message+"</p>")
-                    });
-
-
-                    socket.on("test", function (data) {
-                        $(".right-box").append("<p>test:"+data.message+"</p>")
-                        console.log("test",data);
-                    });
+                socket.on("test", function (data) {
+                    $(".right-box").append("<p>test:" + data.message + "</p>")
+                    console.log("test", data);
+                });
 
 //                })
-            }else{
+            } else {
                 alert("请输入用户名后再试");
             }
         });
 
-        $("#sendMsg").click(function(){
+        $("#sendMsg").click(function () {
             var toName = $("input[name='to']").val().trim();
             var message = $("input[name='message']").val().trim();
-            console.log(uName,toName,message);
-            if(toName == ""){
+            console.log(uName, toName, message);
+            if (toName == "") {
                 alert("对方名称不能为空!");
-            }else if(message == ""){
+            } else if (message == "") {
                 alert("消息不能为空!")
-            }else if(uName == ""){
+            } else if (uName == "") {
                 alert("我的名称不能为空!");
-            }else{
-                socket.emit("message", { message: message,target:toName,from:uName });
+            } else {
+                socket.emit("message", {message: message, target: toName, from: uName});
             }
         })
 
@@ -76,16 +165,15 @@
     }(jQuery));
 
 
+    //      socket.on(socket.id,function(data){
+    //          console.log(data);
+    //      })
 
-//      socket.on(socket.id,function(data){
-//          console.log(data);
-//      })
+    //      var arr = [];
+    //        for(var key in loginBean){
+    //          arr.push(key);
+    //          console.log(key+":"+typeof key);
+    //      }
 
-//      var arr = [];
-//        for(var key in loginBean){
-//          arr.push(key);
-//          console.log(key+":"+typeof key);
-//      }
-
-  </script>
+</script>
 </html>

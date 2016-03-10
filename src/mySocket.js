@@ -19,14 +19,12 @@ mySocket.prototype.init = function(port){
     //socket部分
     socketIo.on('connection', function(socket) {
         //接收并处理客户端发送的foo事件
-        //socket.emit('private', { will: 'be received by everyone'});
 
-        //socket.on("private123",function(data){
-        //    console.log(socket.id +":connection");
-        console.log(socket);
-            //console.log('I received a private message by ',data);
-            //console.log('I received a private message by '+data.target +" say:"+data.message);
-        //})
+        //socketIo.emit("aaa","124");   发送给所有客户端
+
+        //socket.emit("aaa","124");   发送给自己
+
+        //socket.broadcast.emit("aaa","13"); 广播,不包含自己
 
         socket.on("login",function(data){
             users[data] = socket;

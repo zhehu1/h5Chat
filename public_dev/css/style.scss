@@ -25,6 +25,11 @@ $leftFgColor: #fff;
   filter: blur($blur);
 }
 
+@mixin overflow($x,$y){
+  overflow-x: $x;
+  overflow-y: $y;;
+}
+
 html{
   font-size: 62.5%;
 }
@@ -34,14 +39,14 @@ body {
   padding:0;
   margin:0;
   font: $defaultFont;
+  min-width: 1200px;
 }
 
 .body-bg{
-  //background: url("../images/bg.jpg") no-repeat left top;
   background-size: cover;
   position: absolute;
   z-index: -1;
-  @include widthAndHeight(100vw,100vh);
+  @include widthAndHeight(100%,100%);
   @include blur(2px);
 }
 
@@ -49,17 +54,24 @@ a {
   color: #00B7FF;
 }
 
+.container{
+  min-width: 1200px;
+  height: 100vh;
+}
+
 .float-left{
   float: left;
 }
 
 .left-box{
-  @include widthAndHeight(10vw,100vh);
+  @include widthAndHeight(10%,100%);
   @include box-sizing(border-box);
   @extend .float-left;
   color: $leftFgColor;
   background-color: $leftBgColor;
   display: block;
+  padding:0 1rem;
+  position: relative;
 }
 
 .left-box .icon{
@@ -71,19 +83,83 @@ a {
   background-color: $leftFgColor;
 }
 
+.myPic{
+  width: 100%;
+  margin-top: 8rem;
+}
+
 .mid-box{
-  @include widthAndHeight(24vw,100vh);
+  @include widthAndHeight(24%,100%);
   @extend .float-left;
   @include box-sizing(border-box);
+  @include overflow(hidden,scroll);
   display: block;
   background-color: rgba(255,255,255,.8);
   border-right:1px solid #ccc;
 }
 
+.mid-box .am-list>li{
+  padding:1rem;
+  height: 10rem;
+  line-height: 8rem;
+}
+
+.mid-box .am-list>li.active{
+  background-color: #eee;
+}
+
+.list-img{
+  width:6rem;
+}
+
 .right-box{
   @extend .float-left;
   @include box-sizing(border-box);
-  @include widthAndHeight(66vw,100vh);
+  @include widthAndHeight(66%,100%);
   background-color: rgba(255,255,255,.7);
   display: block;
+}
+
+.right-top{
+  @include widthAndHeight(100%,5rem);
+  border-bottom: 1px solid #eee;
+  @include box-sizing(border-box);
+  line-height: 5rem;
+}
+
+.right-middle{
+  @include widthAndHeight(100%,60%);
+  border-bottom: 1px solid #eee;
+  @include box-sizing(border-box);
+  @include overflow(hidden,scroll);
+}
+
+.right-middle .am-list>li{
+  border:none;
+}
+
+.right-bottom{
+  @include widthAndHeight(100%,28%);
+}
+
+.tool-list{
+  list-style: none;
+}
+
+.tool-list li{
+  float: left;
+  padding:10px;
+}
+
+.textInput{
+  @include widthAndHeight(100%,100%);
+  @include box-sizing(border-box);
+  padding:1rem;
+}
+
+.textInput textarea{
+  @include widthAndHeight(100%,100%);
+  @include box-sizing(border-box);
+  border:1px solid #efefef;
+  resize: none;
 }
