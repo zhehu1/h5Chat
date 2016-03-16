@@ -1,165 +1,119 @@
-$defaultFont: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-
-$leftBgColor: rgba(28,175,226,.8);
-$leftFgColor: #fff;
-@mixin widthAndHeight($width,$height){
-  width: $width;
-  height: $height;
-}
-
-@mixin box-sizing ($sizing) {
-  -webkit-box-sizing:$sizing;
-  -moz-box-sizing:$sizing;
-  box-sizing:$sizing;
-}
-
-@mixin center-block {
-  margin-left:auto;
-  margin-right:auto;
-}
-
-@mixin blur($blur){
-  -webkit-filter: blur($blur); /* Chrome, Opera */
-  -moz-filter: blur($blur);
-  -ms-filter: blur($blur);
-  filter: blur($blur);
-}
-
-@mixin overflow($x,$y){
-  overflow-x: $x;
-  overflow-y: $y;;
-}
-
-html{
-  font-size: 62.5%;
-}
-
-body {
-  font-size:1.4rem;
-  padding:0;
-  margin:0;
-  font: $defaultFont;
-  min-width: 1200px;
-}
-
-.body-bg{
-  background-size: cover;
+@mixin triangle($direction, $size, $borderColor,$marginTop) {
+  content:"";
+  height: 0;
+  width: 0;
   position: absolute;
-  z-index: -1;
-  @include widthAndHeight(100%,100%);
-  @include blur(2px);
+  top:0;
+  margin-top: $marginTop;
+
+  @if $direction == top {
+    border-bottom:$size solid $borderColor;
+    border-left:$size dashed transparent;
+    border-right:$size dashed transparent;
+  }
+  @else if $direction == right {
+    right:0;
+    border-left:$size solid $borderColor;
+    border-top:$size dashed transparent;
+    border-bottom:$size dashed transparent;
+
+  }
+  @else if $direction == bottom {
+    border-top:$size solid $borderColor;
+    border-left:$size dashed transparent;
+    border-right:$size dashed transparent;
+  }
+  @else if $direction == left {
+    left:0;
+    border-right:$size solid $borderColor;
+    border-top:$size dashed transparent;
+    border-bottom:$size dashed transparent;
+  }
 }
 
-a {
-  color: #00B7FF;
+.am-container {
+  margin: 30px auto;
 }
 
-.container{
-  min-width: 1200px;
-  height: 100vh;
+.am-input-group-label {
+  padding: 0;
+  border: none;
 }
 
-.float-left{
-  float: left;
+.am-panel-bd {
+  height: 500px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 0;
 }
 
-.left-box{
-  @include widthAndHeight(10%,100%);
-  @include box-sizing(border-box);
-  @extend .float-left;
-  color: $leftFgColor;
-  background-color: $leftBgColor;
-  display: block;
-  padding:0 1rem;
-  position: relative;
+.friendList.active {
+  background-color: #efefef;
 }
 
-.left-box .icon{
-  border:1px solid $leftFgColor;
-  background-color: $leftBgColor;
-}
-
-.left-box .icon.active{
-  background-color: $leftFgColor;
-}
-
-.myPic{
-  width: 100%;
-  margin-top: 8rem;
-}
-
-.mid-box{
-  @include widthAndHeight(24%,100%);
-  @extend .float-left;
-  @include box-sizing(border-box);
-  @include overflow(hidden,scroll);
-  display: block;
-  background-color: rgba(255,255,255,.8);
-  border-right:1px solid #ccc;
-}
-
-.mid-box .am-list>li{
-  padding:1rem;
-  height: 10rem;
-  line-height: 8rem;
-}
-
-.mid-box .am-list>li.active{
-  background-color: #eee;
-}
-
-.list-img{
-  width:6rem;
-}
-
-.right-box{
-  @extend .float-left;
-  @include box-sizing(border-box);
-  @include widthAndHeight(66%,100%);
-  background-color: rgba(255,255,255,.7);
-  display: block;
-}
-
-.right-top{
-  @include widthAndHeight(100%,5rem);
-  border-bottom: 1px solid #eee;
-  @include box-sizing(border-box);
-  line-height: 5rem;
-}
-
-.right-middle{
-  @include widthAndHeight(100%,60%);
-  border-bottom: 1px solid #eee;
-  @include box-sizing(border-box);
-  @include overflow(hidden,scroll);
-}
-
-.right-middle .am-list>li{
-  border:none;
-}
-
-.right-bottom{
-  @include widthAndHeight(100%,28%);
-}
-
-.tool-list{
+.friendList {
   list-style: none;
+  padding-left: 0;
+
+  li.active {
+    background-color: #efefef;
+  }
+
+  li {
+    border-bottom: 1px solid #eee;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    img {
+      vertical-align: middle;
+      width: 40px;
+      height: 40px;
+    }
+  }
 }
 
-.tool-list li{
-  float: left;
+.message-box{
   padding:10px;
 }
 
-.textInput{
-  @include widthAndHeight(100%,100%);
-  @include box-sizing(border-box);
-  padding:1rem;
+.message{
+  padding:10px;
+  position: relative;
+  img{
+    height:40px;
+    width: 40px;
+    vertical-align: middle;
+  }
+
+  .body{
+    width: 100%;
+    left:40px;
+    right: 0;
+    padding:5px 10px;
+    word-break: break-word;
+    background-color: rgb(202,233,242);
+  }
 }
 
-.textInput textarea{
-  @include widthAndHeight(100%,100%);
-  @include box-sizing(border-box);
-  border:1px solid #efefef;
-  resize: none;
+.message.left{
+  .body{
+    text-align: left;
+  }
+  .body:before{
+    @include triangle(left,10px,rgb(202,233,242),20px);
+  }
 }
+
+.message.right{
+  .body{
+    text-align: right;
+  }
+  .body:after{
+    @include triangle(right,10px,rgb(202,233,242),20px);
+  }
+}
+
