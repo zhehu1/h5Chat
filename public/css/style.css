@@ -8,7 +8,6 @@
 .am-panel-bd {
   height: 500px;
   overflow-x: hidden;
-  overflow-y: scroll;
   padding: 0; }
 
 .friendList.active {
@@ -19,7 +18,14 @@
   padding-left: 0; }
   .friendList li.active {
     background-color: #efefef; }
+  .friendList li:hover, .friendList li:active {
+    background-color: #eee; }
   .friendList li {
+    -webkit-transition: background-color 1s;
+    -moz-transition: background-color 1s;
+    -ms-transition: background-color 1s;
+    -o-transition: background-color 1s;
+    transition: background-color 1s;
     border-bottom: 1px solid #eee;
     width: 100%;
     height: 60px;
@@ -37,6 +43,7 @@
   padding: 10px; }
 
 .message {
+  clear: both;
   padding: 10px;
   position: relative; }
   .message img {
@@ -44,15 +51,22 @@
     width: 40px;
     vertical-align: middle; }
   .message .body {
-    width: 100%;
-    left: 40px;
+    width: auto;
     right: 0;
     padding: 5px 10px;
     word-break: break-word;
-    background-color: #cae9f2; }
+    background-color: #cae9f2;
+    display: inline-block;
+    position: relative;
+    max-width: 510px; }
 
 .message.left .body {
-  text-align: left; }
+  border-radius: 5px;
+  float: left;
+  margin-left: 20px; }
+
+.message.left img {
+  float: left; }
 
 .message.left .body:before {
   content: "";
@@ -60,14 +74,19 @@
   width: 0;
   position: absolute;
   top: 0;
-  margin-top: 20px;
-  left: 0;
+  margin-top: 10px;
+  left: -10px;
   border-right: 10px solid #cae9f2;
   border-top: 10px dashed transparent;
   border-bottom: 10px dashed transparent; }
 
 .message.right .body {
-  text-align: right; }
+  border-radius: 5px;
+  float: right;
+  margin-right: 20px; }
+
+.message.right img {
+  float: right; }
 
 .message.right .body:after {
   content: "";
@@ -75,8 +94,18 @@
   width: 0;
   position: absolute;
   top: 0;
-  margin-top: 20px;
-  right: 0;
+  margin-top: 10px;
+  right: -10px;
   border-left: 10px solid #cae9f2;
   border-top: 10px dashed transparent;
   border-bottom: 10px dashed transparent; }
+
+.am-panel-bd.myUserInfo {
+  height: 90px;
+  padding: 10px; }
+  .am-panel-bd.myUserInfo img {
+    vertical-align: middle;
+    width: 40px;
+    height: 40px; }
+  .am-panel-bd.myUserInfo span {
+    color: #red; }
