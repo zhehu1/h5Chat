@@ -159,3 +159,11 @@
     color: #red;
   }
 }
+
+.input-cover{
+  position: absolute;
+  width: 48px;
+  height: 37px;
+  opacity: 0;
+  z-index: 2;
+}

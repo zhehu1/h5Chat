@@ -65,11 +65,17 @@ gulp.task('imagemin',function(){
 });
 
 gulp.task('default', function() {
-    gulp.run('lint', 'sass', 'scripts','imagemin');
+    //gulp.run('lint', 'sass', 'scripts','imagemin');
+    gulp.run('lint', 'sass','imagemin');
+
+    //// 监听js文件变化
+    //gulp.watch(myPath.jsDevDest+'/*.js', function(){
+    //    gulp.run('lint', 'scripts');
+    //});
 
     // 监听js文件变化
     gulp.watch(myPath.jsDevDest+'/*.js', function(){
-        gulp.run('lint', 'scripts');
+        gulp.run('lint');
     });
 
     // 监听sass文件变化
