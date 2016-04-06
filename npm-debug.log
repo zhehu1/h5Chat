@@ -4,30 +4,36 @@
 1 verbose cli   'start' ]
 2 info using npm@2.14.12
 3 info using node@v4.2.4
-4 verbose stack Error: Failed to parse json
-4 verbose stack Unexpected token '/' at 7:2
-4 verbose stack //    "start": "supervisor ./bin/www"
-4 verbose stack  ^
-4 verbose stack     at parseError (/Users/coffee/.nvm/versions/node/v4.2.4/lib/node_modules/npm/node_modules/read-package-json/read-json.js:379:11)
-4 verbose stack     at parseJson (/Users/coffee/.nvm/versions/node/v4.2.4/lib/node_modules/npm/node_modules/read-package-json/read-json.js:68:23)
-4 verbose stack     at /Users/coffee/.nvm/versions/node/v4.2.4/lib/node_modules/npm/node_modules/read-package-json/read-json.js:48:5
-4 verbose stack     at /Users/coffee/.nvm/versions/node/v4.2.4/lib/node_modules/npm/node_modules/graceful-fs/graceful-fs.js:76:16
-4 verbose stack     at FSReqWrap.readFileAfterClose [as oncomplete] (fs.js:380:3)
-5 verbose cwd /Users/coffee/WebstormProjects/h5Chat
-6 error Darwin 15.3.0
-7 error argv "/Users/coffee/.nvm/versions/node/v4.2.4/bin/node" "/Users/coffee/.nvm/versions/node/v4.2.4/bin/npm" "start"
-8 error node v4.2.4
-9 error npm  v2.14.12
-10 error file /Users/coffee/WebstormProjects/h5Chat/package.json
-11 error code EJSONPARSE
-12 error Failed to parse json
-12 error Unexpected token '/' at 7:2
-12 error //    "start": "supervisor ./bin/www"
-12 error  ^
-13 error File: /Users/coffee/WebstormProjects/h5Chat/package.json
-14 error Failed to parse package.json data.
-14 error package.json must be actual JSON, not just JavaScript.
-14 error
-14 error This is not a bug in npm.
-14 error Tell the package author to fix their package.json file. JSON.parse
-15 verbose exit [ 1, true ]
+4 verbose run-script [ 'prestart', 'start', 'poststart' ]
+5 info prestart h5Chat@0.0.0
+6 info start h5Chat@0.0.0
+7 verbose unsafe-perm in lifecycle true
+8 info h5Chat@0.0.0 Failed to exec start script
+9 verbose stack Error: h5Chat@0.0.0 start: `node ./bin/www`
+9 verbose stack Exit status 1
+9 verbose stack     at EventEmitter.<anonymous> (/Users/coffee/.nvm/versions/node/v4.2.4/lib/node_modules/npm/lib/utils/lifecycle.js:214:16)
+9 verbose stack     at emitTwo (events.js:87:13)
+9 verbose stack     at EventEmitter.emit (events.js:172:7)
+9 verbose stack     at ChildProcess.<anonymous> (/Users/coffee/.nvm/versions/node/v4.2.4/lib/node_modules/npm/lib/utils/spawn.js:24:14)
+9 verbose stack     at emitTwo (events.js:87:13)
+9 verbose stack     at ChildProcess.emit (events.js:172:7)
+9 verbose stack     at maybeClose (internal/child_process.js:818:16)
+9 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+10 verbose pkgid h5Chat@0.0.0
+11 verbose cwd /Users/coffee/WebstormProjects/h5Chat
+12 error Darwin 15.3.0
+13 error argv "/Users/coffee/.nvm/versions/node/v4.2.4/bin/node" "/Users/coffee/.nvm/versions/node/v4.2.4/bin/npm" "start"
+14 error node v4.2.4
+15 error npm  v2.14.12
+16 error code ELIFECYCLE
+17 error h5Chat@0.0.0 start: `node ./bin/www`
+17 error Exit status 1
+18 error Failed at the h5Chat@0.0.0 start script 'node ./bin/www'.
+18 error This is most likely a problem with the h5Chat package,
+18 error not with npm itself.
+18 error Tell the author that this fails on your system:
+18 error     node ./bin/www
+18 error You can get their info via:
+18 error     npm owner ls h5Chat
+18 error There is likely additional logging output above.
+19 verbose exit [ 1, true ]

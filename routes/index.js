@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 //Checks query string params (req.query), ex: ?id=12
 //Checks urlencoded body params (req.body), ex: id=
 
-    router.post('/loginCheck', function(req, res, next) {
+router.post('/loginCheck', function(req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
     console.log(username,password);

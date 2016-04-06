@@ -35,10 +35,6 @@ mySocket.prototype.init = function(port){
                 userInfo:data,
                 id : socket.id
             };
-            console.log("currUser",currUser);
-            console.log("usersId",usersId);
-
-            console.log("currUser.userInfo.uId=====",currUser.userInfo.uId);
             users[currUser.userInfo.uId] = socket;
 
             socket.emit("joinIn",usersId);
@@ -54,22 +50,40 @@ mySocket.prototype.init = function(port){
         });
 
         socket.on("sendMsgToPersonal",function(data){
+            if(data.to!=""){
+                users[data.to].emit(data.to,{
+                    data:data,
+                    type:"text"
+                });
+            }
+        });
+
+        socket.on("sendImgMsgToPersonal",function(data){
+            if(data.to!=""){
+                users[data.to].emit(data.to,{
+                    data:data,
+                    type:"img"
+                });
+            }
+        });
+
+        socket.on("sendFileMsgToPersonal",function(data){
+            //console.log(data);
             console.log(data);
             if(data.to!=""){
-                users[data.to].emit(data.to,data);
+                users[data.to].emit(data.to,{
+                    data:data,
+                    type:"file"
+                });
             }
-            //console.log(users[data.to]);
-
         });
 
         socket.on('message', function (from) {
-            //console.log(from,from.target);
-            //socket.emit(from.target, from);
             users[from.target].emit(from.target, from);
         });
 
         socket.on('disconnect', function (d) {
-            console.log(d);
+            //console.log(d);
             var currUser;
             usersId.forEach(function(item,index){
                 if(item.id == socket.id){

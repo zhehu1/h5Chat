@@ -1,5 +1,5 @@
 @mixin triangle($direction, $size, $borderColor,$marginTop) {
-  content:"";
+  content: "";
   height: 0;
   width: 0;
   position: absolute;
@@ -7,32 +7,28 @@
   margin-top: $marginTop;
 
   @if $direction == top {
-    border-bottom:$size solid $borderColor;
-    border-left:$size dashed transparent;
-    border-right:$size dashed transparent;
-  }
-  @else if $direction == right {
+    border-bottom: $size solid $borderColor;
+    border-left: $size dashed transparent;
+    border-right: $size dashed transparent;
+  } @else if $direction == right {
     right: -10px;
-    border-left:$size solid $borderColor;
-    border-top:$size dashed transparent;
-    border-bottom:$size dashed transparent;
+    border-left: $size solid $borderColor;
+    border-top: $size dashed transparent;
+    border-bottom: $size dashed transparent;
 
-  }
-  @else if $direction == bottom {
-    border-top:$size solid $borderColor;
-    border-left:$size dashed transparent;
-    border-right:$size dashed transparent;
-  }
-  @else if $direction == left {
-    left:-10px;
-    border-right:$size solid $borderColor;
-    border-top:$size dashed transparent;
-    border-bottom:$size dashed transparent;
+  } @else if $direction == bottom {
+    border-top: $size solid $borderColor;
+    border-left: $size dashed transparent;
+    border-right: $size dashed transparent;
+  } @else if $direction == left {
+    left: -10px;
+    border-right: $size solid $borderColor;
+    border-top: $size dashed transparent;
+    border-bottom: $size dashed transparent;
   }
 }
 
-
-@mixin transition($prop,$time){
+@mixin transition($prop,$time) {
   -webkit-transition: $prop $time;
   -moz-transition: $prop $time;
   -ms-transition: $prop $time;
@@ -68,12 +64,12 @@
     background-color: #efefef;
   }
 
-  li:hover,li:active{
+  li:hover, li:active {
     background-color: #eee;
   }
 
   li {
-    @include transition(background-color,1s);
+    @include transition(background-color, 1s);
     border-bottom: 1px solid #eee;
     width: 100%;
     height: 60px;
@@ -90,80 +86,138 @@
   }
 }
 
-.message-box{
-  padding:10px;
+.message-box {
+  padding: 10px;
 }
 
-.message{
+.message {
   clear: both;
-  padding:10px;
+  padding: 10px;
   position: relative;
-  img{
-    height:40px;
+  img {
+    height: 40px;
     width: 40px;
     vertical-align: middle;
   }
 
-  .body{
+  .body {
     width: auto;
     //left:40px;
     right: 0;
-    padding:5px 10px;
+    padding: 5px 10px;
     word-break: break-word;
-    background-color: rgb(202,233,242);
+    background-color: rgb(202, 233, 242);
     display: inline-block;
     position: relative;
     max-width: 510px;
+
+    .emjoy{
+      height: 25px;
+      width: 25px;
+      vertical-align: bottom;
+      float: none;
+    }
   }
 }
 
-.message.left{
-  .body{
+.message.left {
+  .body {
     border-radius: 5px;
     float: left;
     margin-left: 20px;
   }
-  img{
+  img {
     float: left;
   }
-  .body:before{
-    @include triangle(left,10px,rgb(202,233,242),10px);
+  .body:before {
+    @include triangle(left, 10px, rgb(202, 233, 242), 10px);
   }
 }
 
-.message.right{
+.message.right {
 
-  .body{
+  .body {
     border-radius: 5px;
     float: right;
     margin-right: 20px;
   }
-  img{
+  img {
     float: right;
   }
-  .body:after{
-    @include triangle(right,10px,rgb(202,233,242),10px);
+  .body:after {
+    @include triangle(right, 10px, rgb(202, 233, 242), 10px);
   }
 }
 
-
-.am-panel-bd.myUserInfo{
+.am-panel-bd.myUserInfo {
   height: 90px;
-  padding:10px;
-  img{
+  padding: 10px;
+  img {
     vertical-align: middle;
     width: 40px;
     height: 40px;
   }
-  span{
-    color: #red;
+  span {
+    color: red;
   }
 }
 
-.input-cover{
+.input-cover {
   position: absolute;
   width: 48px;
   height: 37px;
   opacity: 0;
   z-index: 2;
+}
+
+#fileFormId input {
+  display: inline;
+  width: 48px;
+  height: 37px;
+  position: absolute;
+  opacity: 0;
+  z-index: 2;
+}
+
+.emjoy-td-hover td:hover{
+  background-color: #e9e9e9;
+}
+
+.emjoyPanel{
+  width: 202px;
+  height: 125px;
+  box-shadow: none;
+  position: absolute;
+  top: 0;
+  margin-top: -150px;
+  ul{
+    border: none;
+    width: 100%;
+    height: 100%;
+    li{
+      width: 100%;
+      height: 100%;
+      border-top:1px solid #efefef;
+      //border-bottom:1px solid #efefef;
+      box-sizing: border-box;
+      //a{
+
+        img{
+          display: inline-block !important;
+          width: 25px !important;
+          height: 25px;
+          float: left;
+          //width: 100%;
+          padding:2px;
+          box-sizing: border-box;
+          border-right:1px solid #efefef;
+          border-bottom:1px solid #efefef;
+          cursor: pointer;
+        //}
+      }
+      img.isLeft{
+        border-left:1px solid #efefef;
+      }
+    }
+  }
 }
