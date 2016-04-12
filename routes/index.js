@@ -5,7 +5,6 @@ var ajaxResult = new AjaxResilt();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
   res.render('index', { title: '基于HTML5的实时聊天工具' });
 });
 

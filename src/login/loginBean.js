@@ -24,6 +24,16 @@ var loginBean = {
     },
     setPassword : function(password){
         this.password = password;
+    },
+    toString : function(){
+        return "uId="+this.uId+";username="+this.username+";password"+this.password;
+    },
+    toObj : function(){
+        return {
+            uId:this.uId,
+            username:this.username,
+            password:this.password
+        }
     }
 };
 
