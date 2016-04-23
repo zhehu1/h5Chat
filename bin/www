@@ -23,7 +23,7 @@ var server = http.createServer(app);
 
 
 //初始化自定义socket
-var mySocket =new require('../src/mySocket');
+var mySocket =new require('../routes/mySocket');
 var socket = new mySocket();
 socket.init(server);
 

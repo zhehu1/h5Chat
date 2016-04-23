@@ -1,6 +1,7 @@
 /**
  * Created by vuji on 16/4/11.
  */
+var mysql = require("mysql");
 var conf = {
     //dev
     mysqlDev: {
@@ -11,7 +12,7 @@ var conf = {
         port: 3306,             //数据库端口
         connectionLimit: 30,        //配置最大链接数
         supportBigNumbers: true,
-        debug:true
+        debug:false
     },
     //product
     mysql: {
@@ -25,5 +26,6 @@ var conf = {
         debug:false
     }
 };
+var conn = mysql.createPool(conf.mysqlDev);
 
-exports.conf = conf;
+exports.pool = conn;

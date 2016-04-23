@@ -4,9 +4,9 @@
 var express = require('express');
 var router = express.Router();
 
-var AjaxResult = require("../src/ajaxResult/ajaxResult");
+var AjaxResult = require("../../common/ajaxResult");
 var ajaxResult = new AjaxResult();
-var FileUploadService =require("../src/fileUpload/fileUploadService");
+var FileUploadService =require("../service/fileUploadService");
 
 var fileUploadService = new FileUploadService();
 

@@ -6,9 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/user/controller/users');
-var fileUpload = require('./routes/fileUpload');
-var SqlBean = require('./src/mysql/sqlBean');
-var sqlBean = new SqlBean();
+var fileUpload = require('./routes/file/controller/fileUpload');
 
 var app = express();
 

@@ -4,7 +4,7 @@
 var multiparty = require('multiparty');
 var util = require('util');
 var fs = require('fs');
-var AjaxResilt = require("../ajaxResult/ajaxResult");
+var AjaxResilt = require("../../common/ajaxResult");
 var ajaxResult = new AjaxResilt();
 var BASE_PATH = "../public/files/";
 var fileUploadService = function(){}

@@ -2,7 +2,7 @@
  * Created by vuji on 16/4/11.
  */
 var fileDao = function(){};
-var conn = require('../../connection/mysqlConn');
+var conn = require('../../connection/mysqlExec');
 
 fileDao.prototype.uploadFile = function(str,next){
     conn.pool.getConnection(function(err,connection){
@@ -13,7 +13,7 @@ fileDao.prototype.uploadFile = function(str,next){
 
         connection.query(sqlStr,queryArr,function(err,result){
 
-            var strParseToJSON = JSON.parse(JSON.stringify(result));
+            //var strParseToJSON = JSON.parse(JSON.stringify(result));
             //错误处理
             if(err){
                 throw "SQL异常!"+JSON.stringify(err);
