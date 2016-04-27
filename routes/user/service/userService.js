@@ -66,7 +66,7 @@ userService.prototype.changePwd = function(params,cb){
  * 获取用户信息
  * @type {userService}
  */
-userService.prototype.getUserInfoByLoginName = function(params,cb){
+userService.prototype.getUserInfoById = function(params,cb){
     userDao.getUserInfoByLoginName(params,function(data){
         if(data.code == 0) {
             cb(0, data.resultObj);
@@ -74,6 +74,44 @@ userService.prototype.getUserInfoByLoginName = function(params,cb){
             cb(1,"数据库异常!");
         }else{
             cb(1,"用户名或密码错误!");
+        }
+    })
+};
+
+/**
+ * 检测用户名是否存在
+ * @param params
+ * @param cb
+ */
+userService.prototype.checkLoginName = function(params,cb){
+    userDao.checkLoginNameIsExit(params,function(data){
+        if(data.code == 0) {
+            if(data.affectedRows == 0){
+                cb(0, "该账号不存在");
+            }else{
+                cb(1,"该账号已存在!");
+            }
+        } else if(data.code == -1){
+            cb(1,"数据库异常!");
+        }else{
+            cb(1,"该账号已存在!");
+        }
+    })
+}
+
+/**
+ * 修改用户信息
+ * @param params
+ * @param cb
+ */
+userService.prototype.updateUserInfo = function(params,cb){
+    userDao.updateUserInfo(params,function(data){
+        if(data.code == 0) {
+            cb(0, data.resultObj);
+        } else if(data.code == -1){
+            cb(1,"数据库异常!");
+        }else{
+            cb(1,"用户信息修改失败!");
         }
     })
 }

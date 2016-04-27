@@ -16,7 +16,7 @@ var userDao = function(){};
  */
 userDao.prototype.register = function(params,cb){
     sqlExec.exe(loginSQL.add,params,cb);
-}
+};
 
 /**
  * 用户登录验证
@@ -25,7 +25,7 @@ userDao.prototype.register = function(params,cb){
  */
 userDao.prototype.verify = function(params,cb){
     sqlExec.exe(loginSQL.verifyUser,params,cb);
-}
+};
 
 /**
  * 修改密码
@@ -34,7 +34,7 @@ userDao.prototype.verify = function(params,cb){
  */
 userDao.prototype.changePwd = function(params,cb){
     sqlExec.exe(loginSQL.changePwd,params,cb);
-}
+};
 
 /**
  * 获取当前登录用户的用户信息
@@ -43,7 +43,7 @@ userDao.prototype.changePwd = function(params,cb){
  */
 userDao.prototype.getUserInfo = function(params,cb){
     sqlExec.exe(userSQL.getUserInfo,params,cb);
-}
+};
 
 /**
  * 通过账号获取当前登录用户的用户信息
@@ -52,8 +52,26 @@ userDao.prototype.getUserInfo = function(params,cb){
  */
 userDao.prototype.getUserInfoByLoginName = function(params,cb){
     sqlExec.exe(userSQL.getUserInfoByLoginName,params,cb);
+};
+
+/**
+ * 检查用户名是否已存在
+ * @param params
+ * @param cb
+ */
+userDao.prototype.checkLoginNameIsExit = function(params,cb){
+    sqlExec.exe(userSQL.checkIsExit,params,cb);
 }
 
+
+/**
+ * 更新用户信息
+ * @param params
+ * @param cb
+ */
+userDao.prototype.updateUserInfo = function(params,cb){
+    sqlExec.exe(userSQL.updateUserInfo,params,cb);
+}
 
 
 module.exports = userDao;

@@ -1,9 +1,115 @@
 var express = require('express');
 var router = express.Router();
+var multiparty = require('multiparty');
+var util = require('util');
+var fs = require('fs');
+var UserService  = require("../service/userService");
+var userService = new UserService();
+var AjaxResult = require("../../common/ajaxResult");
+var ajaxResult = new AjaxResult();
+var BASE_IMG_PATH = "public/userImg/";
+//var userInfoModel = require("../model/userInfoModel");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
+});
+
+/**
+ * 登录验证
+ */
+router.post('/loginCheck', function(req, res, next) {
+  var username = req.body.username;
+  var password = req.body.password;
+  userService.verify([username,password],function(code,message){
+    if(code != 0){
+      res.send(ajaxResult.returnError(message));
+    }else{
+        req.session.userObj = message;
+      res.send(ajaxResult.returnSuccess(message));
+    }
+  })
+});
+
+/**
+ * 检测用户是否存在
+ */
+router.get("/checkIsExit",function(req,res,next){
+    var loginName = req.query.loginName;
+  userService.checkLoginName([loginName],function(code,message){
+    if(code != 0){
+      res.send(ajaxResult.returnError(message));
+    }else{
+      res.send(ajaxResult.returnSuccess(message));
+    }
+  })
+});
+
+/**
+ * 用户注册
+ */
+router.post("/registerDo",function(req,res,next){
+  var loginName = req.body.loginName;
+  var password = req.body.password;
+  var rePassword = req.body.rePassword;
+  if(loginName.trim() == ""){
+    res.send(ajaxResult.returnError("账号不能为空!"))
+  }
+  if(password.trim() == ""){
+    res.send(ajaxResult.returnError("密码不能为空!"))
+  }
+  if(rePassword.trim() == ""){
+    res.send(ajaxResult.returnError("确认密码不能为空!"))
+  }
+  if(password.trim() !== rePassword.trim() ){
+    res.send(ajaxResult.returnError("两次密码输入不一致!"))
+  }
+  userService.addUser([loginName,password],function(code,message){
+    if(code != 0){
+      res.send(ajaxResult.returnError(message));
+    }else{
+      res.send(ajaxResult.returnSuccess(message));
+    }
+  })
+});
+
+
+/**
+ * 更新用户信息
+ */
+router.get("/updateInfo",function(req,res,next){
+    var currUserObj = req.session.userObj;
+    var picture = req.query.picture || null;
+    var nickName = req.query.nickName || null;
+    var birthday = req.query.birthday || null;
+    var address = req.query.address || null;
+    var email = req.query.email || null;
+    var tel = req.query.tel || null;
+    var sex = req.query.sex || null;
+    var arr = [];
+    arr.push(picture);
+    arr.push(nickName);
+    arr.push(birthday);
+    arr.push(address);
+    arr.push(email);
+    arr.push(tel);
+    arr.push(sex);
+    arr.push(currUserObj.id);
+    userService.updateUserInfo(arr,function(code,message){
+        if(code != 0){
+            res.send(ajaxResult.returnError(message));
+        }else{
+            currUserObj.picture = picture;
+            currUserObj.nickName = nickName;
+            currUserObj.birthday = birthday;
+            currUserObj.address = address;
+            currUserObj.email = email;
+            currUserObj.tel = tel;
+            currUserObj.sex = sex;
+            req.session.userObj = currUserObj;
+            res.send(ajaxResult.returnSuccess(currUserObj));
+        }
+    })
 });
 
 module.exports = router;

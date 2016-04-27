@@ -9,8 +9,8 @@
     <link rel='stylesheet' href='/css/style.css'/>
 </head>
 <body>
-
-    <div class="am-container">
+<div id="particles-js" style="position: absolute;left: 0;top: 0;z-index: 1;width: 100%;height: 100%;"></div>
+    <div class="am-container" style="position: relative;z-index: 2">
         <div class="am-g">
             <div class="am-panel-default am-u-sm-4 am-u-xs-4">
                 <section class="am-panel am-panel-secondary">
@@ -116,7 +116,79 @@
             </div>
         </div>
     </div>
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="personalInfo">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">个人信息修改
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd">
+                <form class="am-form am-form-horizontal" id="userInfoImg" enctype="multipart/form-data" method="post">
+                    <div class="am-u-sm-9 am-u-sm-offset-3">
+                        <input type="file" name="files">
+                    </div>
+                </form>
+                <form class="am-form am-form-horizontal" id="userInfo" method="post">
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">用户头像</label>
+                        <div class="am-u-sm-9 am-text-left">
+                            <img src="/images/shuijiao.jpg" alt="" class="am-circle w-h100px">
+                            <input type="text" name="picture">
+                            <!--<input type="text" name="picture" placeholder="请选择文件" value="/images/shuijiao.jpg">-->
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">昵称</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="nickName" placeholder="请输入昵称">
+                        </div>
+                    </div>
 
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">生日</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" class="am-form-field" name="birthday" id="birthday" placeholder="请选择生日" readonly/>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">地址</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="address" placeholder="请输入地址">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">邮箱</label>
+                        <div class="am-u-sm-9">
+                            <input type="email" name="email" placeholder="请输入邮箱">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">电话</label>
+                        <div class="am-u-sm-9">
+                            <input type="tel" name="tel" placeholder="请输入电话">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-form-label">性别</label>
+                        <div class="am-u-sm-9 am-text-left am-margin-top-sm">
+                            <input type="radio" name="sex" value="1">男
+                            <input type="radio" name="sex" value="2">女
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-2 am-u-sm-offset-9">
+                            <button type="button" class="am-btn am-btn-primary" onclick="saveUserInfo()">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <canvas id="myCanvas" style="display: none"></canvas>
 </body>
 <script src="/js/socket.io.js"></script>
 <script src="/js/jquery.js"></script>
@@ -125,7 +197,9 @@
 <script src="/js/socketHandle.js"></script>
 <script src="/js/MessageHandle.js"></script>
 <script src="/js/fileHandle.js"></script>
+<script src="/js/particles-js.js"></script>
 <script type="text/javascript">
+    localStorage.setItem("userObj","");
     var userObj = {
         nick:"",
         uId:""
@@ -139,40 +213,83 @@
     var socketHandle;
 
     jQuery(document).ready(function () {
-            $("#login-model").modal();
+        $("#login-model").modal();
+//      $("#personalInfo").modal();
 
     });
 
     /**
      * 登录实现
      */
-    var login = function () {
+    function login() {
         var username = $("input[name='username']").val();
         var password = $("input[name='password']").val();
-        $.post("/loginCheck",{username:username,password:password},function(data){
-            if(data.reusltCode != 1){
+        $.post("/users/loginCheck",{username:username,password:password},function(data){
+            if(data.resultCode != 0){
                 alert(data.message);
             }else{
                 //初始化用户对象
                 userObj.nick = $("input[name='username']").val();
                 userObj.uId = "uId"+userObj.nick+new Date().getTime();
                 $("#myId").text(userObj.nick);
-
+                localStorage.setItem("userObj",JSON.stringify(data.resultObj));
                 //初始化socket连接
                 socketHandle = new SocketHandle();
                 socketHandle.init();
                 userObj.id = socketHandle.getSocketId();
                 socketHandle.login(userObj);
-                $('#login-model').modal();
+                $('#login-model').modal("toggle");
                 //初始化文件处理
                 var fileHandle = new FileHandle();
                 fileHandle.init();
+                renderDataToUserForm();
+                $(".myUserInfo").click(function(){
+                    $("#personalInfo").modal();
+                })
+
+
             }
         })
     }
 
     /**
-     * 进度条
+     * 更新用户信息
+     */
+    function saveUserInfo(){
+        $.ajax({
+            url: '/users/updateInfo',
+            type: 'get',
+            data: $("#userInfo").serialize(),
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function (data) {
+                progress.set(0.4);
+            },
+            complete: function (data) {
+                progress.done(true);
+//                form.reset();
+            },
+            success: function (returnData) {
+                progress.inc();
+//                callback(returnData);
+                if(returnData.resultCode == 0){
+                    localStorage.setItem("userObj",JSON.stringify(returnData.resultObj));
+                }else{
+                    alert(returnData.message);
+                }
+                renderDataToUserForm();
+                $("#personalInfo").modal("toggle");
+            },
+            error: function (returnData) {
+                console.log(returnData);
+            }
+        });
+    }
+
+    /**
+     * 初始化进度条
      */
     var progress = $.AMUI.progress;
     progress.configure({
@@ -227,7 +344,50 @@
             $("#emjoy-slider").toggle();
         })
 //        $("#emjoy-slider").css("display","none");
+
+
+        $(function() {
+            var nowTemp = new Date();
+            var nowDay = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0).valueOf();
+            var nowMoth = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), 1, 0, 0, 0, 0).valueOf();
+            var nowYear = new Date(nowTemp.getFullYear(), 0, 1, 0, 0, 0, 0).valueOf();
+            var $birthday = $('#birthday');
+            var checkin = $birthday.datepicker({
+                onRender: function(date, viewMode) {
+                    // 默认 days 视图，与当前日期比较
+                    var viewDate = nowDay;
+
+                    switch (viewMode) {
+                        // moths 视图，与当前月份比较
+                        case 1:
+                            viewDate = nowMoth;
+                            break;
+                        // years 视图，与当前年份比较
+                        case 2:
+                            viewDate = nowYear;
+                            break;
+                    }
+
+                    return date.valueOf() > viewDate ? 'am-disabled' : '';
+                }
+            }).data('amui.datepicker');
+        })
     })
 
+    function renderDataToUserForm(){
+        var userObj = JSON.parse(localStorage.getItem("userObj"));
+        $(".myUserInfo img").attr("src",userObj.picture || "");
+        $("#myId").text(userObj.nickName || "");
+        document.querySelector("#userInfo input[name='picture']").value = userObj.picture || "";
+        document.querySelector("#userInfo img").src = userObj.picture || "";
+        document.querySelector("#userInfo input[name='nickName']").value = userObj.nickName || "";
+        document.querySelector("#userInfo input[name='birthday']").value = (userObj.birthday  || "").substring(0,10);
+        document.querySelector("#userInfo input[name='address']").value = userObj.address || "";
+        document.querySelector("#userInfo input[name='email']").value = userObj.email || "";
+        document.querySelector("#userInfo input[name='tel']").value = userObj.tel || "";
+        if(userObj.sex != null){
+            document.querySelectorAll("#userInfo input[name='sex']")[userObj.sex-1].checked = true;
+        }
+    }
 </script>
 </html>

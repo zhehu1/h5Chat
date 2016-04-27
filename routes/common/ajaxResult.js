@@ -5,14 +5,14 @@ var ajaxResult = function(){};
 
 
 var successObj = {
-    reusltCode : 1,
+    resultCode : 1,
     message : "",
     resultObj:{}
 }
 
 function getError(data){
     return {
-        reusltCode : 0,
+        resultCode : 1,
         message : data,
         resultObj:{}
     }
@@ -21,7 +21,7 @@ function getError(data){
 
 function getSuccess(data){
     return {
-        reusltCode : 1,
+        resultCode : 0,
         message : "",
         resultObj:data
     }
@@ -29,7 +29,7 @@ function getSuccess(data){
 
 function getUnLogin(){
     return {
-        reusltCode : 2,
+        resultCode : 2,
         message : "用户未登录!",
         resultObj:{}
     }

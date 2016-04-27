@@ -14,6 +14,7 @@ FileHandle.prototype = {
                 alert("请选择聊天对象!");
                 return;
             }
+            progress.set(0.4);
             var files = e.target.files;
             that.imageHandle(files[0],function(data){
                 msgHandle.addImgToMsgBox(data,false);
@@ -25,7 +26,7 @@ FileHandle.prototype = {
         var fileform = document.querySelector("#fileFormId");
         fileform.onchange = function(e){
             that.fileUpload(fileform,function(data){
-                if(data.reusltCode == 1){
+                if(data.resultCode == 0){
                     msgHandle.addFileToMsgBox(data.resultObj.filePath,false);
                     socketHandle.sendFileMsgToPersonal(data.resultObj.filePath);
                 }else{
@@ -34,6 +35,21 @@ FileHandle.prototype = {
             })
         }
 
+        var pictureFile = document.querySelector("#userInfoImg");
+        pictureFile.onchange = function(e){
+            progress.set(0.2);
+            var files = e.target.files[0];
+            that.uploadImg(pictureFile,function(data){
+                console.log(data);
+                if(data.resultCode == "0"){
+                    document.querySelector("#userInfo input[name='picture']").value = data.resultObj.filePath[0].linkPath;
+                    document.querySelector("#userInfo img").src = data.resultObj.filePath[0].linkPath;
+                    pictureFile.reset();
+                }else{
+                    alert(data.message);
+                }
+            })
+        }
 
     },
 
@@ -43,6 +59,7 @@ FileHandle.prototype = {
      * @param callback
      */
     imageHandle : function(imgFile,callback){
+        var that = this;
         if(!typeof  FileReader){
             alert("对不起,您的浏览器暂不支持发送图片,请更新到最新版浏览器!");
             return;
@@ -51,15 +68,47 @@ FileHandle.prototype = {
             alert("该文件不是图片!");
             return;
         }
-        progress.inc();
         var reader = new FileReader();
+        progress.inc();
         reader.onload = function(e){
-            callback(e.target.result);
+            callback(e.target.result,callback);
             progress.done(true);
         }
         reader.readAsDataURL(imgFile);
     },
 
+    /**
+     * 用户头像上传
+     * @param form
+     * @param callback
+     */
+    uploadImg : function(form,callback){
+        var formdata = new FormData(form);
+        $.ajax({
+            url: '/fileUpload/uploadImg',
+            type: 'POST',
+            data: formdata,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function (data) {
+                progress.set(0.4);
+            },
+            complete: function (data) {
+                progress.done(true);
+                form.reset();
+            },
+            success: function (returnData) {
+                progress.inc();
+                callback(returnData);
+                //console.log(returnData);
+            },
+            error: function (returnData) {
+                console.log(returnData);
+            }
+        });
+    },
     /**
      * 文件处理
      * @param form
@@ -68,32 +117,27 @@ FileHandle.prototype = {
     fileUpload : function(form,callback) {
         var formdata = new FormData(form);
         $.ajax({
-            url: '/fileUpload/upload',
+            url: '/fileUpload/uploadFile',
             type: 'POST',
             data: formdata,
-            async: false,
+            async: true,
             cache: false,
             contentType: false,
             processData: false,
             beforeSend: function (data) {
-//                    console.log("beforeSend");
                 progress.set(0.4);
-//                    console.log(data);
             },
             complete: function (data) {
-//                    console.log("complete");
                 console.log(data);
                 progress.done(true);
                 form.reset();
             },
-            success: function (returndata) {
-//                    console.log("success");
+            success: function (returnData) {
                 progress.inc();
-                callback(returndata);
-//                    console.log(returndata);
+                callback(returnData);
             },
-            error: function (returndata) {
-                console.log(returndata);
+            error: function (returnData) {
+                console.log(returnData);
             }
         });
     }

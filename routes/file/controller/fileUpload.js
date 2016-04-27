@@ -11,15 +11,13 @@ var FileUploadService =require("../service/fileUploadService");
 var fileUploadService = new FileUploadService();
 
 
-router.post('/upload', function(req, res, next) {
-    //console.log(req.files);
-    fileUploadService.upload(req,res,next);
-    //form.parse(req, function(err, fields, files) {
-    //    console.log(err,fields,files);
-    //    res.writeHead(200, {'content-type': 'text/plain'});
-    //    res.write('received upload:\n\n');
-    //    res.end(util.inspect({fields: fields, files: files}));
-    //});
+router.post('/uploadFile', function(req, res, next) {
+    fileUploadService.uploadFile(req,res,next);
 });
+
+router.post('/uploadImg', function(req, res, next) {
+    fileUploadService.uploadImg(req,res,next);
+});
+
 
 module.exports = router;

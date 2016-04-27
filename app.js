@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -9,6 +10,13 @@ var users = require('./routes/user/controller/users');
 var fileUpload = require('./routes/file/controller/fileUpload');
 
 var app = express();
+
+app.use(session({
+  secret: 'HTML5Chat', // 建议使用 128 个字符的随机字符串
+  cookie: { maxAge: 60 * 1000 },
+  resave:true,
+  saveUninitialized:false
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

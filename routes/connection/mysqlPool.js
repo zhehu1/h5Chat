@@ -12,7 +12,7 @@ var conf = {
         port: 3306,             //数据库端口
         connectionLimit: 30,        //配置最大链接数
         supportBigNumbers: true,
-        debug:false
+        debug:true
     },
     //product
     mysql: {

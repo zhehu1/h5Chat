@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="/assets/css/amazeui.flat.min.css"/>
+</head>
+<body>
+<div class="am-container">
+    <form class="am-form" id="register-form">
+        <fieldset>
+            <legend>用户注册</legend>
+            <div class="am-form-group">
+                <label for="loginName">账号</label>
+                <input type="text" id="loginName" name="loginName"
+                       placeholder="请输入账号" data-validate-async required  />
+            </div>
+
+            <div class="am-form-group">
+                <label for="password">密码：</label>
+                <input type="password" id="password" name="password"
+                       placeholder="请输入密码"/>
+            </div>
+            <div class="am-form-group">
+                <label for="rePassword">确认密码：</label>
+                <input type="password" id="rePassword" name="rePassword" data-equal-to="#password"
+                       placeholder="确认密码"/>
+            </div>
+
+            <button id="registerSubmit" class="am-btn am-btn-secondary" type="submit">提交</button>
+        </fieldset>
+    </form>
+</div>
+</body>
+<script src="/js/jquery.js"></script>
+<script src="/assets/js/amazeui.min.js"></script>
+<script>
+    $(function() {
+        $('#register-form').validator({
+            validate: function(validity) {
+
+                // Ajax 验证
+                if ($(validity.field).is('#loginName')) {
+
+                    if($(validity.field).val() == ""){
+                        validErr(validity.field,"账号不能为空!");
+                        validity.valid = false;
+                        return validity;
+                    }
+
+                    // 异步操作必须返回 Deferred 对象
+                    return $.ajax({
+                        url: '/users/checkIsExit',
+                        cache: false, //实际使用中请禁用缓存
+                        dataType: 'json',
+                        data:{loginName:$(validity.field).val()}
+                    }).then(function(data) {
+                        if(data.resultCode == 0){
+                            validSuccess(validity.field);
+                            validity.valid = true;
+                        }else{
+                            validErr(validity.field,data.message);
+                            validity.valid = false;
+                        }
+                        return validity;
+                    }, function() {
+                        validity.valid = false;
+                        return validity;
+                    });
+                }
+
+                if($(validity.field).is('#password')){
+                    if($(validity.field).val() == ""){
+                        validErr(validity.field,"密码不能为空!");
+                        validity.valid = false;
+                        return validity;
+                    }else{
+                        $('#rePassword').trigger('change');
+                        validSuccess(validity.field);
+                        validity.valid = true;
+                        return validity;
+                    }
+                }
+
+                if($(validity.field).is('#rePassword')){
+                    if($(validity.field).val() == ""){
+                        validErr(validity.field,"确认密码不能为空!");
+                        validity.valid = false;
+                        return validity;
+                    }else if($(validity.field).val() != $('#password').val()){
+                        validErr('#rePassword',"两次密码输入不一致!!");
+                        validity.valid = false;
+                        return validity;
+                    }else{
+                        validSuccess('#rePassword');
+                        validity.valid = true;
+                        return validity;
+                    }
+                }
+            },
+            submit: function(e) {
+                e.preventDefault();
+                var formValidity = this.isFormValid();
+
+                $.when(formValidity).then(function () {
+                    // 验证成功的逻辑
+                    return $.ajax({
+                        url: '/users/registerDo',
+                        cache: false, //实际使用中请禁用缓存
+                        dataType: 'json',
+                        type:"post",
+                        data:$("#register-form").serialize(),
+                    }).then(function(data) {
+                        if(data.resultCode == 0){
+                            location.href = "/";
+                        }else{
+                            alert(data.message);
+                        }
+                    },function(data){
+                        alert("网络异常!")
+                    })
+                }, function () {
+                    // 验证失败的逻辑
+                    console.log("error")
+                });
+            }
+        });
+
+
+        function validSuccess(target) {
+            $(target).closest('.am-form-group').find('.am-alert').hide();
+        }
+        function validErr(target,message){
+            var $field = $(target);
+            var $group = $field.closest('.am-form-group');
+            var $alert = $group.find('.am-alert');
+            // 使用自定义的提示信息 或 插件内置的提示信息
+            var msg =message || "";
+
+            if (!$alert.length) {
+                $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+                appendTo($group);
+            }
+
+            $alert.html(msg).show();
+        }
+    });
+</script>
+</html>
