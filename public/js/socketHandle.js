@@ -35,7 +35,7 @@ SocketHandle.prototype = {
 
         //接收单对单消息
         this.socket.on(userObj.uId,function(data){
-            console.log("userObj.uId"+JSON.stringify(data));
+            //console.log("userObj.uId"+JSON.stringify(data));
             if(data!==""){
                 if(data.type == "file"){
                     that.msgHandle.addFileToMsgBox(data.data.msg,true);

@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/user/controller/users');
 var fileUpload = require('./routes/file/controller/fileUpload');
+var chatMessage = require('./routes/chatMessage/controller/chatMessageController');
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/fileUpload', fileUpload);
+app.use('/chatMessage', chatMessage);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

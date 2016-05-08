@@ -49,7 +49,7 @@ MessageHandle.prototype = {
         var html ="";
         console.log(name);
         name.forEach(function(item){
-            html = '<li class="am-animation-slide-bottom" id='+item.userInfo.uId+'> <img src="/images/shuijiao.jpg" alt="" class="am-circle"> <span>'+item.userInfo.nick+'</span></li>';
+            html = '<li class="am-animation-slide-bottom" id='+item.userInfo.uId+'> <img src="'+item.userInfo.picture+'" alt="" class="am-circle"> <span>'+item.userInfo.nick+'</span></li>';
             $(".friendList").append(html);
             $("#"+item.userInfo.uId).click(function(){
                 $(this).addClass("active").siblings().removeClass("active");
@@ -68,7 +68,7 @@ MessageHandle.prototype = {
      * @param content
      * @param isSend
      */
-    addToMsgBox : function(content,isSend){
+    addToMsgBox : function(content,isSend,pic){
         var html = "";
         if(isSend){
             html += '<div class="message left am-animation-slide-bottom"><img src="/images/shuijiao.jpg" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';

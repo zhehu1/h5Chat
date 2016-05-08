@@ -359,8 +359,6 @@ var emjoyObj = {
         }
         var that = this;
         var returnStr = msg;
-        console.log(returnStr);
-        console.log(this.getMsgEmjoyArr(msg));
         this.getMsgEmjoyArr(msg).forEach(function(item){
             console.log(item.match(new RegExp(/emjoy[0-9]+/g))[0]);
             var currEmjoy = that.BASE_PATH+that[item.match(new RegExp(/emjoy[0-9]+/g))[0]+"show"];

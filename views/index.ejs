@@ -127,13 +127,12 @@
                         <input type="file" name="files">
                     </div>
                 </form>
-                <form class="am-form am-form-horizontal" id="userInfo" method="post">
+                <form class="am-form am-form-horizontal" id="userInfo">
                     <div class="am-form-group">
                         <label class="am-u-sm-3 am-form-label">用户头像</label>
                         <div class="am-u-sm-9 am-text-left">
                             <img src="/images/shuijiao.jpg" alt="" class="am-circle w-h100px">
                             <input type="text" name="picture">
-                            <!--<input type="text" name="picture" placeholder="请选择文件" value="/images/shuijiao.jpg">-->
                         </div>
                     </div>
                     <div class="am-form-group">
@@ -146,7 +145,7 @@
                     <div class="am-form-group">
                         <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">生日</label>
                         <div class="am-u-sm-9">
-                            <input type="text" class="am-form-field" name="birthday" id="birthday" placeholder="请选择生日" readonly/>
+                            <input type="text"2 name="birthday" id="birthday" placeholder="请选择生日" readonly/>
                         </div>
                     </div>
 
@@ -202,18 +201,22 @@
     localStorage.setItem("userObj","");
     var userObj = {
         nick:"",
-        uId:""
+        uId:"",
+        picture : ""
     }
 
     var receiveUserObj = {
-        nick:"",
-        uId:""
+        nick:"" ,
+        uId:"" ,
+        picture : ""
     }
 
     var socketHandle;
 
     jQuery(document).ready(function () {
-        $("#login-model").modal();
+        $("#login-model").modal({
+            closeViaDimmer:false
+        });
 //      $("#personalInfo").modal();
 
     });
@@ -229,8 +232,9 @@
                 alert(data.message);
             }else{
                 //初始化用户对象
-                userObj.nick = $("input[name='username']").val();
-                userObj.uId = "uId"+userObj.nick+new Date().getTime();
+                userObj.nick = data.resultObj.nickName;
+                userObj.uId = "uId"+data.resultObj.id;
+                userObj.picture = data.resultObj.picture;
                 $("#myId").text(userObj.nick);
                 localStorage.setItem("userObj",JSON.stringify(data.resultObj));
                 //初始化socket连接
@@ -242,7 +246,7 @@
                 //初始化文件处理
                 var fileHandle = new FileHandle();
                 fileHandle.init();
-                renderDataToUserForm();
+                renderDataToUserForm(localStorage.getItem("userObj"));
                 $(".myUserInfo").click(function(){
                     $("#personalInfo").modal();
                 })
@@ -269,17 +273,15 @@
             },
             complete: function (data) {
                 progress.done(true);
-//                form.reset();
             },
             success: function (returnData) {
                 progress.inc();
-//                callback(returnData);
                 if(returnData.resultCode == 0){
                     localStorage.setItem("userObj",JSON.stringify(returnData.resultObj));
                 }else{
                     alert(returnData.message);
                 }
-                renderDataToUserForm();
+                renderDataToUserForm(localStorage.getItem("userObj"));
                 $("#personalInfo").modal("toggle");
             },
             error: function (returnData) {
@@ -310,7 +312,42 @@
         '<div class="nprogress-spinner-icon"></div></div>'
     })
 
+    var birthdayView;
     $(document).ready(function(){
+        initEmjoyPanel();
+        //初始化日期选择控件
+        $(function() {
+            var nowTemp = new Date();
+            var nowDay = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0).valueOf();
+            var nowMoth = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), 1, 0, 0, 0, 0).valueOf();
+            var nowYear = new Date(nowTemp.getFullYear(), 0, 1, 0, 0, 0, 0).valueOf();
+            var $birthday = $('#birthday');
+            birthdayView = $birthday.datepicker({
+                onRender: function(date, viewMode) {
+                    // 默认 days 视图，与当前日期比较
+                    var viewDate = nowDay;
+
+                    switch (viewMode) {
+                        // moths 视图，与当前月份比较
+                        case 1:
+                            viewDate = nowMoth;
+                            break;
+                        // years 视图，与当前年份比较
+                        case 2:
+                            viewDate = nowYear;
+                            break;
+                    }
+
+                    return date.valueOf() > viewDate ? 'am-disabled' : '';
+                }
+            }).data('amui.datepicker');
+        })
+    })
+
+    /**
+     * 初始化表情选择
+     **/
+    function initEmjoyPanel(){
         var html = "";
         for(var i=0;i<=170;i++){
             if(i%40===0){
@@ -337,51 +374,28 @@
         $("#emjoy-slider ul li img").click(function(){
             document.getElementById("chatText").value += $(this).attr("emjoy-target");
         })
+//        $("#emjoy-slider").hide();
         $("#emjoy-slider").mouseleave(function(){
-            $("#emjoy-slider").css("display","none");
+            $("#emjoy-slider").hide();
         })
         $("#selectEmjoy").click(function(){
             $("#emjoy-slider").toggle();
         })
-//        $("#emjoy-slider").css("display","none");
 
+    }
 
-        $(function() {
-            var nowTemp = new Date();
-            var nowDay = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0).valueOf();
-            var nowMoth = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), 1, 0, 0, 0, 0).valueOf();
-            var nowYear = new Date(nowTemp.getFullYear(), 0, 1, 0, 0, 0, 0).valueOf();
-            var $birthday = $('#birthday');
-            var checkin = $birthday.datepicker({
-                onRender: function(date, viewMode) {
-                    // 默认 days 视图，与当前日期比较
-                    var viewDate = nowDay;
-
-                    switch (viewMode) {
-                        // moths 视图，与当前月份比较
-                        case 1:
-                            viewDate = nowMoth;
-                            break;
-                        // years 视图，与当前年份比较
-                        case 2:
-                            viewDate = nowYear;
-                            break;
-                    }
-
-                    return date.valueOf() > viewDate ? 'am-disabled' : '';
-                }
-            }).data('amui.datepicker');
-        })
-    })
-
-    function renderDataToUserForm(){
-        var userObj = JSON.parse(localStorage.getItem("userObj"));
+    /**
+     * 将数据渲染到个人信息弹窗
+     */
+    function renderDataToUserForm(data){
+        var userObj = JSON.parse(data);
         $(".myUserInfo img").attr("src",userObj.picture || "");
         $("#myId").text(userObj.nickName || "");
         document.querySelector("#userInfo input[name='picture']").value = userObj.picture || "";
         document.querySelector("#userInfo img").src = userObj.picture || "";
         document.querySelector("#userInfo input[name='nickName']").value = userObj.nickName || "";
-        document.querySelector("#userInfo input[name='birthday']").value = (userObj.birthday  || "").substring(0,10);
+//        document.querySelector("#userInfo input[name='birthday']").value = (userObj.birthday  || "").substring(0,10);
+        birthdayView.setValue(userObj.birthday  || "");
         document.querySelector("#userInfo input[name='address']").value = userObj.address || "";
         document.querySelector("#userInfo input[name='email']").value = userObj.email || "";
         document.querySelector("#userInfo input[name='tel']").value = userObj.tel || "";
