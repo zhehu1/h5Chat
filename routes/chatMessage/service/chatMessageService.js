@@ -13,7 +13,8 @@ var chatMessageService = function(){};
 chatMessageService.prototype.insertMsg = function(parsms,cb){
     chatMessageDao.insertMsg(parsms,function(data){
         if(data.code == 0){
-            cb(0,"插入成功!");
+            //cb(0,"插入成功!");
+            cb(0,data);
         }else if(data.code == -1){
             cb(1,"插入失败!");
         }else{

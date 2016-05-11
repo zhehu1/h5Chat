@@ -8,27 +8,43 @@ FileHandle.prototype = {
     init : function(){
         var msgHandle = new MessageHandle();
         var that = this;
-        var imgEle = document.querySelector(".image");
+        var imgEle = document.querySelector("#imgFormId");
         imgEle.onchange = function(e){
             if(receiveUserObj.uId == ""){
+                imgEle.reset();
                 alert("请选择聊天对象!");
                 return;
             }
+            var files = e.target.files[0];
+            if(!/image/.test(files.type)){
+                imgEle.reset();
+                alert("该文件不是图片!");
+                return;
+            }
             progress.set(0.4);
-            var files = e.target.files;
-            that.imageHandle(files[0],function(data){
-                msgHandle.addImgToMsgBox(data,false);
-                socketHandle.sendImgMsgToPersonal(data);
-                imgEle.value = "";
-            });
+            that.uploadImg(imgEle,function(data){
+                if(data.resultCode == "0"){
+                    msgHandle.addImgToMsgBox(data.resultObj.filePath,false);
+                    socketHandle.sendImgMsgToPersonal(data.resultObj.filePath);
+                    imgEle.reset();
+                }else{
+                    alert(data.message);
+                }
+            })
         }
 
         var fileform = document.querySelector("#fileFormId");
         fileform.onchange = function(e){
+            if(receiveUserObj.uId == ""){
+                alert("请选择聊天对象!");
+                fileform.reset();
+                return;
+            }
             that.fileUpload(fileform,function(data){
                 if(data.resultCode == 0){
                     msgHandle.addFileToMsgBox(data.resultObj.filePath,false);
                     socketHandle.sendFileMsgToPersonal(data.resultObj.filePath);
+                    fileform.reset();
                 }else{
                     alert(data.message);
                 }

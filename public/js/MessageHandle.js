@@ -49,15 +49,8 @@ MessageHandle.prototype = {
         var html ="";
         console.log(name);
         name.forEach(function(item){
-            html = '<li class="am-animation-slide-bottom" id='+item.userInfo.uId+'> <img src="'+item.userInfo.picture+'" alt="" class="am-circle"> <span>'+item.userInfo.nick+'</span></li>';
+            html = '<li class="am-animation-slide-bottom" id='+item.userInfo.uId+' onmousedown="mouseClickUser(this,event)"> <img src="'+item.userInfo.picture+'" alt="" class="am-circle"> <span>'+item.userInfo.nick+'</span></li>';
             $(".friendList").append(html);
-            $("#"+item.userInfo.uId).click(function(){
-                $(this).addClass("active").siblings().removeClass("active");
-                receiveUserObj.uId = $(this).attr("id");
-                receiveUserObj.nick = $(this).find("span").text();
-                console.log(receiveUserObj);
-                $("#myNicName").text("正在与"+receiveUserObj.nick+"聊天");
-            })
         })
 
     },
@@ -70,11 +63,14 @@ MessageHandle.prototype = {
      */
     addToMsgBox : function(content,isSend,pic){
         var html = "";
+        console.log("=======");
+        console.log(userObj.picture);
         if(isSend){
-            html += '<div class="message left am-animation-slide-bottom"><img src="/images/shuijiao.jpg" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
+            html += '<div class="message left am-animation-slide-bottom"> <img src="'+receiveUserObj.picture+'" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
         }else{
-            html += '<div class="message right am-animation-slide-bottom"> <img src="/images/shuijiao.jpg" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
+            html += '<div class="message right am-animation-slide-bottom"><img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
         }
+        console.log(html);
         $("#messageList").append(html);
         $("#messageList").scrollTop(999999999)
     },
@@ -87,9 +83,9 @@ MessageHandle.prototype = {
     addImgToMsgBox : function(content,isSend){
         var html = "";
         if(isSend){
-            html += '<div class="message left am-animation-slide-bottom"><img src="/images/shuijiao.jpg" alt="" class="am-circle"/><div class="body"><img src="'+content+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+            html += '<div class="message left am-animation-slide-bottom"> <img src="'+receiveUserObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+content[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
         }else{
-            html += '<div class="message right am-animation-slide-bottom"><img src="/images/shuijiao.jpg" alt="" class="am-circle"/><div class="body"><img src="'+content+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+            html += '<div class="message right am-animation-slide-bottom"><img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+content[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
         }
         $("#messageList").append(html);
         $("#messageList").scrollTop(999999999)
@@ -101,19 +97,17 @@ MessageHandle.prototype = {
      * @param isSend
      */
     addFileToMsgBox : function(content,isSend){
-        console.log(content);
         var html = "";
         var tpl = "";
         if(isSend){
-            tpl = '<div class="message left am-animation-slide-bottom"><img src="/images/shuijiao.jpg" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+            tpl = '<div class="message left am-animation-slide-bottom"> <img src="'+receiveUserObj.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
         }else{
-            tpl = '<div class="message right am-animation-slide-bottom"> <img src="/images/shuijiao.jpg" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+            tpl = '<div class="message right am-animation-slide-bottom"> <img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
         }
         html += content.map(function(item){
-            return tpl.replace("{{linkPath}}",item.linkPath).replace("{{name}}",item.name);
+            return tpl.replace("{{linkPath}}",content.linkPath).replace("{{name}}",item.name);
         }).join("");
 
-        console.log(html);
         $("#messageList").append(html);
         $("#messageList").scrollTop(999999999)
     },
@@ -130,5 +124,24 @@ MessageHandle.prototype = {
             receiveUserObj.nick = "";
         }
         $("#myNicName").text("昵称");
+    }
+}
+
+function mouseClickUser(t,e){
+    var currEle = t;
+    var mouseBtnNum = e.button;
+    if(mouseBtnNum == 0){
+        //鼠标左键点击
+        $(currEle).addClass("active").siblings().removeClass("active");
+        receiveUserObj.uId = $(currEle).attr("id");
+        receiveUserObj.nick = $(currEle).find("span").text();
+        receiveUserObj.picture = $(currEle).find("img").attr("src");
+        $("#myNicName").text("正在与"+receiveUserObj.nick+"聊天");
+    }else if(mouseBtnNum == 1){
+        //鼠标中键点击
+
+    }else if(mouseBtnNum == 2){
+        //鼠标右键点击
+
     }
 }

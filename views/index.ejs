@@ -57,10 +57,12 @@
                                 </a>
                             </div>
                             <div class="am-btn-group">
-                                <input type="file" class="input-cover image">
-                                <a class="am-btn am-btn-primary" href="#">
-                                    <i class="am-icon-image"></i>
-                                </a>
+                                <form method="post" enctype="multipart/form-data" id="imgFormId">
+                                    <input type="file" class="input-cover" name=files>
+                                    <a class="am-btn am-btn-primary" href="#">
+                                        <i class="am-icon-image"></i>
+                                    </a>
+                                </form>
                             </div>
                             <div class="am-btn-group">
                                 <form method="post" enctype="multipart/form-data" id="fileFormId">

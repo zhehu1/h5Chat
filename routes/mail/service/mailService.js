@@ -3,26 +3,45 @@
  */
 var nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
-    service: 'qq',
+var mailConf = {
+    // service: 'qq',
+    // auth: {
+    //     user: '3299475089@qq.com',
+    //     pass: ''
+    // }
+    host: "smtp.163.com", // 主机
+    secure: true, // 使用 SSL
+    port: 994, // SMTP 端口
     auth: {
-        user: '3299475089@qq.com',
-        pass: ''
+        user: "h5ChatService@163.com", // 账号
+        pass: "aaa1234" // 密码
     }
-});
+}
+
+var transporter = nodemailer.createTransport(mailConf);
 
 var mailOptions = {
-    from: '3299475089@qq.com', // sender address
+    from: 'h5ChatService <h5ChatService@163.com>', // sender address
     to: '286808713@qq.com', // list of receivers
     subject: 'Hello ✔', // Subject line
     text: 'Hello world ✔', // plaintext body
-    html: '<b>Hello world ✔</b>' // html body
-};
+    html: '<b>这是一封测试邮件</b>' // html body
+}
 
-transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-        console.log(error);
-    }else{
-        console.log('Message sent: ' + info.response);
-    }
-});
+exports.sendMail = function(to,subject,text,html,callback){
+
+    mailOptions.to = to;
+    mailOptions.subject = to;
+    mailOptions.text = text;
+    mailOptions.html = to;
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(error);
+            callback("fail",error);
+        }else{
+            callback("success",info);
+            console.log('Message sent: ' + info.response);
+        }
+    });
+}

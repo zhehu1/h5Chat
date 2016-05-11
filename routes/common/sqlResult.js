@@ -39,7 +39,7 @@ function affectNo(data){
                 code : 0,
                 message : "1行受到影响",
                 affectedRows:1,
-                resultObj:data[0]
+                resultObj:data
             };
         }else{
             return {

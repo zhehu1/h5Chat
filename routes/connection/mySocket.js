@@ -2,12 +2,16 @@
  * Created by vuji on 16/1/31.
  */
 var socketIo = require('socket.io')();
+var ChatRecord = require('../chatMessage/service/chatMessageService');
+var chatRecord = new ChatRecord();
 
 var mySocket = function(){};
 
 
 var users = {};
 var usersId = [];
+
+var getUidRegex = /[0-9]+/;
 
 /**
  * module export
@@ -30,7 +34,6 @@ mySocket.prototype.init = function(port){
         //socket.broadcast.emit("aaa","13"); 广播,不包含自己
 
         socket.on("login",function(data){
-            console.log(data);
             var currUser = {
                 userInfo:data,
                 id : socket.id
@@ -51,29 +54,38 @@ mySocket.prototype.init = function(port){
 
         socket.on("sendMsgToPersonal",function(data){
             if(data.to!=""){
-                users[data.to].emit(data.to,{
-                    data:data,
-                    type:"text"
+                chatRecord.insertMsg([data.from.match(getUidRegex)[0],data.to.match(getUidRegex)[0],JSON.stringify(data),1],function(code,execData){
+                    users[data.to].emit(data.to,{
+                        data:data,
+                        type:"text",
+                        messageId:execData.resultObj.insertId
+                    });
                 });
             }
         });
 
         socket.on("sendImgMsgToPersonal",function(data){
             if(data.to!=""){
-                users[data.to].emit(data.to,{
-                    data:data,
-                    type:"img"
-                });
+                chatRecord.insertMsg([data.from.match(getUidRegex)[0],data.to.match(getUidRegex)[0],JSON.stringify(data),2],function(code,execData){
+                    users[data.to].emit(data.to,{
+                        data:data,
+                        type:"img",
+                        messageId:execData.resultObj.insertId
+                    });
+                })
+
             }
         });
 
         socket.on("sendFileMsgToPersonal",function(data){
-            //console.log(data);
-            console.log(data);
+            //将消息插入到数据库
             if(data.to!=""){
-                users[data.to].emit(data.to,{
-                    data:data,
-                    type:"file"
+                chatRecord.insertMsg([data.from.match(getUidRegex)[0],data.to.match(getUidRegex)[0],JSON.stringify(data),3],function(code,execData){
+                    users[data.to].emit(data.to,{
+                        data:data,
+                        type:"file",
+                        messageId:execData.resultObj.insertId
+                    });
                 });
             }
         });

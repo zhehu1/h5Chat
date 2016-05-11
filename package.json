@@ -20,6 +20,7 @@
     "morgan": "~1.5.3",
     "mysql": "^2.10.2",
     "mysql-queues": "^1.0.0",
+    "nodemailer": "^2.3.2",
     "serve-favicon": "~2.2.1",
     "socket.io": "^1.4.5"
   },
