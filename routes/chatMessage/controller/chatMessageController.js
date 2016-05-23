@@ -11,12 +11,11 @@ var ajaxResult = new AjaxResult();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    var arr =[];
-    arr.push(req.query.from);
-    arr.push(req.query.to);
-    arr.push(req.query.msg);
-    arr.push(req.query.type);
-    chatMessageService.insertMsg(arr,function(code,message){
+    var from = req.query.from;
+    var to = req.query.to;
+    var msg = req.query.msg;
+    var type = req.query.type;
+    chatMessageService.insertMsg([from,to,msg,type],function(code,message){
         res.send(ajaxResult.returnSuccess(message));
     })
 });

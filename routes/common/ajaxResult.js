@@ -3,13 +3,6 @@
  */
 var ajaxResult = function(){};
 
-
-var successObj = {
-    resultCode : 1,
-    message : "",
-    resultObj:{}
-}
-
 function getError(data){
     return {
         resultCode : 1,

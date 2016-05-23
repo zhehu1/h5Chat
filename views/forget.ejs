@@ -8,27 +8,16 @@
 </head>
 <body>
 <div class="am-container" style="margin-top: 100px">
-    <form class="am-form" id="register-form">
+    <form class="am-form" id="forget-form">
         <fieldset>
             <legend><%= title%></legend>
             <div class="am-form-group">
                 <label for="loginName">账号</label>
                 <input type="text" id="loginName" name="loginName"
                        placeholder="请输入账号" data-validate-async required  />
+                <input type="text" id="uId" name="uId" style="display: none">
             </div>
-
-            <div class="am-form-group">
-                <label for="password">密码：</label>
-                <input type="password" id="password" name="password"
-                       placeholder="请输入密码"/>
-            </div>
-            <div class="am-form-group">
-                <label for="rePassword">确认密码：</label>
-                <input type="password" id="rePassword" name="rePassword" data-equal-to="#password"
-                       placeholder="确认密码"/>
-            </div>
-
-            <button id="registerSubmit" class="am-btn am-btn-secondary" type="submit">提交</button>
+            <button id="registerSubmit" class="am-btn am-btn-secondary" type="submit">找回密码</button>
         </fieldset>
     </form>
 </div>
@@ -37,7 +26,32 @@
 <script src="/assets/js/amazeui.min.js"></script>
 <script>
     $(function() {
-        $('#register-form').validator({
+        /**
+         * 初始化进度条
+         */
+        var progress = $.AMUI.progress;
+        progress.configure({
+            minimum: 0.1,
+            easing: 'ease-in-out',
+            positionUsing: '',
+            speed: 200,
+            trickle: true,
+            trickleRate: 0.02,
+            trickleSpeed: 800,
+            showSpinner: true,
+            barSelector: '[role="nprogress-bar"]',
+            spinnerSelector: '[role="nprogress-spinner"]',
+            parent: 'body',
+            template: '<div class="nprogress-bar" role="nprogress-bar">' +
+            '<div class="nprogress-peg"></div></div>' +
+            '<div class="nprogress-spinner" role="nprogress-spinner">' +
+            '<div class="nprogress-spinner-icon"></div></div>'
+        })
+
+        /**
+         * 表单验证
+         */
+        $('#forget-form').validator({
             validate: function(validity) {
 
                 // Ajax 验证
@@ -56,11 +70,12 @@
                         dataType: 'json',
                         data:{loginName:$(validity.field).val()}
                     }).then(function(data) {
-                        if(data.resultCode == 0){
+                        if(data.resultCode != 0){
                             validSuccess(validity.field);
+                            $("#uId").val(data.message.id);
                             validity.valid = true;
                         }else{
-                            validErr(validity.field,data.message);
+                            validErr(validity.field,data.resultObj);
                             validity.valid = false;
                         }
                         return validity;
@@ -70,50 +85,25 @@
                     });
                 }
 
-                if($(validity.field).is('#password')){
-                    if($(validity.field).val() == ""){
-                        validErr(validity.field,"密码不能为空!");
-                        validity.valid = false;
-                        return validity;
-                    }else{
-                        $('#rePassword').trigger('change');
-                        validSuccess(validity.field);
-                        validity.valid = true;
-                        return validity;
-                    }
-                }
-
-                if($(validity.field).is('#rePassword')){
-                    if($(validity.field).val() == ""){
-                        validErr(validity.field,"确认密码不能为空!");
-                        validity.valid = false;
-                        return validity;
-                    }else if($(validity.field).val() != $('#password').val()){
-                        validErr('#rePassword',"两次密码输入不一致!!");
-                        validity.valid = false;
-                        return validity;
-                    }else{
-                        validSuccess('#rePassword');
-                        validity.valid = true;
-                        return validity;
-                    }
-                }
             },
             submit: function(e) {
                 e.preventDefault();
                 var formValidity = this.isFormValid();
-
                 $.when(formValidity).then(function () {
+                    progress.inc();
                     // 验证成功的逻辑
                     return $.ajax({
-                        url: '/users/registerDo',
+                        url: '/users/forgetPwd',
                         cache: false, //实际使用中请禁用缓存
                         dataType: 'json',
-                        type:"post",
-                        data:$("#register-form").serialize(),
+                        type:"get",
+                        data:$("#forget-form").serialize(),
                     }).then(function(data) {
                         if(data.resultCode == 0){
-                            location.href = "/";
+                            setTimeout(function(){
+                                progress.done();
+                            },0);
+                            alert("验证邮件已发送至 "+data.resultObj.email+" ,请查收!");
                         }else{
                             alert(data.message);
                         }

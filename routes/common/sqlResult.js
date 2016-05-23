@@ -26,7 +26,7 @@ function errHandle(err){
  * @returns {*}
  */
 function affectNo(data){
-    if(typeof  data.affectedRows != "undefined"){
+    if(typeof data.affectedRows != "undefined"){
         if(data.affectedRows == 0){
             return {
                 code : 1,
@@ -64,6 +64,8 @@ sqlResult.prototype.isErr = function(err){
 }
 
 sqlResult.prototype.exeSuccess = function(data){
+    console.log("=========");
+    console.log(data);
     return affectNo(data);
 }
 

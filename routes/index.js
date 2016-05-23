@@ -18,4 +18,8 @@ router.get("/register",function(req,res,next){
    res.render("register",{title:"用户注册"})
 });
 
+router.get("/forgetPwd",function(req,res,next){
+    res.render("forget",{title:"找回密码"})
+})
+
 module.exports = router;

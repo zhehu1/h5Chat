@@ -5,7 +5,7 @@ var multiparty = require('multiparty');
 var util = require('util');
 var fs = require('fs');
 var AjaxResilt = require("../../common/ajaxResult");
-var encode = require('../../common/encode');
+var encode = require('../../common/encrypt');
 var ajaxResult = new AjaxResilt();
 var BASE_FILE_PATH = "public/files/";
 var BASE_USER_IMG_PATH = "public/userImg/";
@@ -48,6 +48,12 @@ fileUploadService.prototype.uploadFile = function(req,res,next){
     });
 }
 
+/**
+ * 图片上传
+ * @param req
+ * @param res
+ * @param next
+ */
 fileUploadService.prototype.uploadImg = function(req,res,next){
     var form = new multiparty.Form({uploadDir: BASE_USER_IMG_PATH});
     console.log("files",form);
@@ -63,7 +69,6 @@ fileUploadService.prototype.uploadImg = function(req,res,next){
             var returnArr = [];
             inputFile.forEach(function(item){
                 returnArr.push({
-                    //linkPath:item.path.replace(BASE_PATH,""),
                     linkPath:item.path.replace(BASE_USER_IMG_PATH,"/userImg/"),
                     name:item.originalFilename
                 })

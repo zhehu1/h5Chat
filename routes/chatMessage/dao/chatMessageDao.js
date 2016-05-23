@@ -9,7 +9,7 @@ var sqlExec = new SqlExec();
 var chatMessageDao = function(){};
 
 /**
- * 用户注册
+ * 聊天记录插入
  * @param params
  * @param cb
  */

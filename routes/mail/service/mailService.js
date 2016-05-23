@@ -28,8 +28,13 @@ var mailOptions = {
     html: '<b>这是一封测试邮件</b>' // html body
 }
 
-exports.sendMail = function(to,subject,text,html,callback){
+var forgetPwdMail = '<div style="text-align:center">'
+                        +'<p style="text-align:left">nickName,你好：</p><p>'
+                        +'</p><p style="text-align: left; text-indent: 2em;">请<a target="link">点击此处</a>找回密码！若点击无效，复制一下路径到浏览器中</p>'
+                        +'<p style="text-align: left; text-indent: 2em;">link</p>'
+                    +'</div>';
 
+exports.sendMail = function(to,subject,text,html,callback){
     mailOptions.to = to;
     mailOptions.subject = to;
     mailOptions.text = text;
@@ -42,6 +47,22 @@ exports.sendMail = function(to,subject,text,html,callback){
         }else{
             callback("success",info);
             console.log('Message sent: ' + info.response);
+        }
+    });
+}
+
+exports.sendForgetPwdMail = function(to,nickName,link,callback){
+    mailOptions.to = to;
+    mailOptions.subject = "找回密码-基于HTML5的聊天系统";
+    mailOptions.text = "";
+    mailOptions.html = forgetPwdMail.replace((/nickName/g),nickName).replace((/link/g),link);
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            //console.log(error);
+            callback(1,error);
+        }else{
+            callback(0,info);
+            //console.log('Message sent: ' + info.response);
         }
     });
 }

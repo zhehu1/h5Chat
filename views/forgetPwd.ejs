@@ -12,12 +12,6 @@
         <fieldset>
             <legend><%= title%></legend>
             <div class="am-form-group">
-                <label for="loginName">账号</label>
-                <input type="text" id="loginName" name="loginName"
-                       placeholder="请输入账号" data-validate-async required  />
-            </div>
-
-            <div class="am-form-group">
                 <label for="password">密码：</label>
                 <input type="password" id="password" name="password"
                        placeholder="请输入密码"/>
@@ -106,13 +100,14 @@
                 $.when(formValidity).then(function () {
                     // 验证成功的逻辑
                     return $.ajax({
-                        url: '/users/registerDo',
+                        url: '/users/forget/resetPwd',
                         cache: false, //实际使用中请禁用缓存
                         dataType: 'json',
                         type:"post",
                         data:$("#register-form").serialize(),
                     }).then(function(data) {
                         if(data.resultCode == 0){
+                            alert("修改成功!");
                             location.href = "/";
                         }else{
                             alert(data.message);
