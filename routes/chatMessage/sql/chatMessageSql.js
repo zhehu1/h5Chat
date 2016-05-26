@@ -3,7 +3,7 @@
  */
 
 var chatMessageSql = {
-    insertChatMsg : "INSERT INTO `HTML5Chat`.`chat_msgRecord` (`from`, `to`, `msg`, `type`) VALUES (?, ?, ?, ?);"
+    insertChatMsg : "INSERT INTO `HTML5Chat`.`chat_msgRecord` (`from`, `to`, `msg`, `type`,`isGroup`) VALUES (?, ?, ?, ? , ?);"
 };
 
 module.exports =  chatMessageSql;

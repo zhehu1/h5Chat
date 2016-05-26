@@ -83,6 +83,23 @@ userService.prototype.getUserInfoByLoginName = function(params,cb){
 };
 
 /**
+ * 通过id获取用户信息
+ * @param params
+ * @param cb
+ */
+userService.prototype.getUserInfoById = function(params,cb){
+    userDao.getUserInfoById(params,function(data){
+        if(data.code == 0) {
+            cb(0, data.resultObj);
+        } else if(data.code == -1){
+            cb(1,"数据库异常!");
+        }else{
+            cb(1,"用户名或密码错误!");
+        }
+    })
+};
+
+/**
  * 检测用户名是否存在
  * @param params
  * @param cb

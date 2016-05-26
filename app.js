@@ -10,12 +10,13 @@ var users = require('./routes/user/controller/users');
 var fileUpload = require('./routes/file/controller/fileUpload');
 var chatMessage = require('./routes/chatMessage/controller/chatMessageController');
 var friend = require('./routes/friend/controller/friendController');
+var group = require('./routes/group/controller/groupController');
 
 var app = express();
 
 app.use(session({
   secret: 'HTML5Chat', // 建议使用 128 个字符的随机字符串
-  cookie: { maxAge: 60 * 1000 },
+  cookie: { maxAge: 24*60*60 * 1000 },
   resave:true,
   saveUninitialized:false
 }));
@@ -38,6 +39,7 @@ app.use('/users', users);
 app.use('/fileUpload', fileUpload);
 app.use('/chatMessage', chatMessage);
 app.use('/friend', friend);
+app.use('/group', group);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -52,10 +52,16 @@ mySocket.prototype.init = function(port){
             //socket.broadcast.emit("aaa",data);
         });
 
-        socket.on("sendMsgToPersonal",function(data){
-            if(data.to!=""){
-                chatRecord.insertMsg([data.from.match(getUidRegex)[0],data.to.match(getUidRegex)[0],JSON.stringify(data),1],function(code,execData){
-                    users[data.to].emit(data.to,{
+        /**
+         * 接收文本文件消息
+         */
+        socket.on("sendTextMsgToPersonal",function(data){
+            if(data.to.uId!=""){
+                chatRecord.insertMsg([data.from.uId.match(getUidRegex)[0],data.to.uId.match(getUidRegex)[0],JSON.stringify(data),1,0],function(code,execData){
+                    if(typeof users[data.to.uId] == "undefined"){
+                        return;
+                    }
+                    users[data.to.uId].emit(data.to.uId,{
                         data:data,
                         type:"text",
                         messageId:execData.resultObj.insertId
@@ -64,10 +70,16 @@ mySocket.prototype.init = function(port){
             }
         });
 
+        /**
+         * 接收图片文件消息
+         */
         socket.on("sendImgMsgToPersonal",function(data){
-            if(data.to!=""){
-                chatRecord.insertMsg([data.from.match(getUidRegex)[0],data.to.match(getUidRegex)[0],JSON.stringify(data),2],function(code,execData){
-                    users[data.to].emit(data.to,{
+            if(data.to.uId!=""){
+                chatRecord.insertMsg([data.from.uId.match(getUidRegex)[0],data.to.uId.match(getUidRegex)[0],JSON.stringify(data),2,0],function(code,execData){
+                    if(typeof users[data.to.uId] == "undefined"){
+                        return;
+                    }
+                    users[data.to.uId].emit(data.to.uId,{
                         data:data,
                         type:"img",
                         messageId:execData.resultObj.insertId
@@ -77,11 +89,17 @@ mySocket.prototype.init = function(port){
             }
         });
 
+        /**
+         * 接收个人文件消息
+         */
         socket.on("sendFileMsgToPersonal",function(data){
             //将消息插入到数据库
-            if(data.to!=""){
-                chatRecord.insertMsg([data.from.match(getUidRegex)[0],data.to.match(getUidRegex)[0],JSON.stringify(data),3],function(code,execData){
-                    users[data.to].emit(data.to,{
+            if(data.to.uId!=""){
+                chatRecord.insertMsg([data.from.uId.match(getUidRegex)[0],data.to.uId.match(getUidRegex)[0],JSON.stringify(data),3,0],function(code,execData){
+                    if(typeof users[data.to.uId] == "undefined"){
+                        return;
+                    }
+                    users[data.to.uId].emit(data.to.uId,{
                         data:data,
                         type:"file",
                         messageId:execData.resultObj.insertId
@@ -89,6 +107,57 @@ mySocket.prototype.init = function(port){
                 });
             }
         });
+
+        /**
+         * 接收群组文本消息
+         */
+        socket.on("sendTextMsgToGroup",function(data){
+            if(data.to.uId!=""){
+
+                chatRecord.insertMsg([data.from.uId.match(getUidRegex)[0],data.to.uId.match(getUidRegex)[0],JSON.stringify(data),1,1],function(code,execData){
+                    socket.broadcast.emit(data.to.uId, {
+                        data: data,
+                        type: "text",
+                        messageId: execData.resultObj.insertId
+                    });
+                });
+            }
+        });
+
+        /**
+         * 接收群组图片消息
+         */
+        socket.on("sendImgMsgToGroup",function(data){
+            if(data.to.uId!="") {
+                chatRecord.insertMsg([data.from.uId.match(getUidRegex)[0], data.to.uId.match(getUidRegex)[0], JSON.stringify(data), 2, 1], function (code, execData) {
+                    socket.broadcast.emit(data.to.uId, {
+                        data: data,
+                        type: "img",
+                        messageId: execData.resultObj.insertId
+                    });
+
+                });
+            }
+        });
+
+        /**
+         * 接收群组文件消息
+         */
+        socket.on("sendFileMsgToGroup",function(data){
+            if(data.to.uId!="") {
+                chatRecord.insertMsg([data.from.uId.match(getUidRegex)[0], data.to.uId.match(getUidRegex)[0], JSON.stringify(data), 3, 1], function (code, execData) {
+                    socket.broadcast.emit(data.to.uId, {
+                        data: data,
+                        type: "file",
+                        messageId: execData.resultObj.insertId
+                    });
+
+                });
+            }
+
+        });
+
+
 
         socket.on('message', function (from) {
             users[from.target].emit(from.target, from);

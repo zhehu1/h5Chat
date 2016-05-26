@@ -57,6 +57,15 @@ userDao.prototype.getUserInfoByLoginName = function(params,cb){
 };
 
 /**
+ * 通过Id获取当前登录用户的用户信息
+ * @param params
+ * @param cb
+ */
+userDao.prototype.getUserInfoById = function(params,cb){
+    sqlExec.exe(userSQL.getUserInfoById,params,cb);
+}
+
+/**
  * 检查用户名是否已存在
  * @param params
  * @param cb

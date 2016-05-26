@@ -25,7 +25,7 @@ FileHandle.prototype = {
             that.uploadImg(imgEle,function(data){
                 if(data.resultCode == "0"){
                     msgHandle.addImgToMsgBox(data.resultObj.filePath,false);
-                    socketHandle.sendImgMsgToPersonal(data.resultObj.filePath);
+                    socketHandle.sendImgMsg(data.resultObj.filePath);
                     imgEle.reset();
                 }else{
                     alert(data.message);
@@ -43,7 +43,7 @@ FileHandle.prototype = {
             that.fileUpload(fileform,function(data){
                 if(data.resultCode == 0){
                     msgHandle.addFileToMsgBox(data.resultObj.filePath,false);
-                    socketHandle.sendFileMsgToPersonal(data.resultObj.filePath);
+                    socketHandle.sendFileMsg(data.resultObj.filePath);
                     fileform.reset();
                 }else{
                     alert(data.message);

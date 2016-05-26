@@ -100,15 +100,19 @@
                         data:$("#forget-form").serialize(),
                     }).then(function(data) {
                         if(data.resultCode == 0){
+                            progress.done();
                             setTimeout(function(){
-                                progress.done();
+                                alert("验证邮件已发送至 "+data.resultObj.email+" ,请查收!");
                             },0);
-                            alert("验证邮件已发送至 "+data.resultObj.email+" ,请查收!");
                         }else{
-                            alert(data.message);
+                            progress.done();
+                            setTimeout(function(){
+                                alert(data.message);
+                            },0);
                         }
                     },function(data){
-                        alert("网络异常!")
+                        progress.done();
+                        alert("网络异常!");
                     })
                 }, function () {
                     // 验证失败的逻辑

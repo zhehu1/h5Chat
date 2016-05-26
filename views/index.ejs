@@ -10,184 +10,242 @@
 </head>
 <body>
 <div id="particles-js" style="position: absolute;left: 0;top: 0;z-index: 1;width: 100%;height: 100%;"></div>
-    <div class="am-container" style="position: relative;z-index: 2">
-        <div class="am-g">
-            <div class="am-panel-default am-u-sm-4 am-u-xs-4">
-                <section class="am-panel am-panel-secondary">
-                    <header class="am-panel-hd">
-                        <h3 class="am-panel-title">个人信息</h3>
-                    </header>
-                    <div class="am-panel-bd myUserInfo">
-                        <img src="/images/shuijiao.jpg" alt="" class="am-circle">
-                        <span id="myId"></span>
+<div class="am-container" style="position: relative;z-index: 2">
+    <div class="am-g">
+        <div class="am-panel-default am-u-sm-4 am-u-xs-4">
+            <section class="am-panel am-panel-secondary">
+                <header class="am-panel-hd">
+                    <h3 class="am-panel-title">个人信息</h3>
+                </header>
+                <div class="am-panel-bd myUserInfo">
+                    <img src="" alt="" class="am-circle">
+                    <span id="myId"></span>
+                </div>
+                <div class="am-panel-footer" style="padding-top: 0;padding-bottom: 0;">
+                    <div class="am-g">
+                        <button data-am-modal="{target: '#personalInfo'}" class="am-btn am-u-sm-4 am-btn-primary">
+                            <span class="am-icon-edit"></span>
+                        </button>
+                        <button class="am-btn  am-u-sm-4 am-btn-primary" id="userAdd">
+                            <span class="am-icon-user-plus"></span>
+                        </button>
+                        <button class="am-btn am-u-sm-4 am-btn-primary" id="groupAdd">
+                            <span class="am-icon-users"></span>
+                        </button>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <section class=" am-panel am-panel-primary">
-                    <header class="am-panel-hd">
-                        <h3 class="am-panel-title">好友列表</h3>
-                    </header>
-                    <div class="am-panel-bd">
-                        <ul class="friendList">
 
+            <div class="am-tabs" data-am-tabs="{noSwipe: 1}" id="userTab">
+                <ul class="am-tabs-nav am-nav am-nav-tabs">
+                    <li class="am-active am-u-sm-4 am-text-center"><a href="javascript: void(0)">消息<span class="animate-up-to-down am-badge am-badge-danger am-round">6</span></a></li>
+                    <li class="am-u-sm-4 am-text-center"><a href="javascript: void(0)">好友</a></li>
+                    <li class="am-u-sm-4 am-text-center"><a href="javascript: void(0)">群组</a></li>
+                </ul>
+
+                <div class="am-tabs-bd">
+                    <div class="am-tab-panel am-active">
+                        <ul class="messageList">
 
                         </ul>
                     </div>
-                </section>
-            </div>
-            <div class="am-panel-default  am-u-sm-8 am-u-xs-8">
-                <section class=" am-panel am-panel-primary">
-                    <header class="am-panel-hd">
-                        <h3 class="am-panel-title" id="myNicName">昵称</h3>
-                    </header>
-                    <div class="am-panel-bd" id="messageList">
+                    <div class="am-tab-panel">
+                        <ul class="am-list admin-sidebar-list" id="friendList-collapase">
 
+                        </ul>
                     </div>
-                    <footer class="am-panel-footer">
-                        <div class="am-btn-toolbar">
-                            <div class="am-btn-group">
-                                <!--<input type="file" class="input-cover emoji">-->
-                                <div class="am-slider am-slider-default emjoyPanel" id="emjoy-slider">
-                                    <ul class="am-slides"></ul>
-                                </div>
-                                <a class="am-btn am-btn-primary" id="selectEmjoy">
-                                    <i class="am-icon-smile-o"></i>
-                                </a>
-                            </div>
-                            <div class="am-btn-group">
-                                <form method="post" enctype="multipart/form-data" id="imgFormId">
-                                    <input type="file" class="input-cover" name=files>
-                                    <a class="am-btn am-btn-primary" href="#">
-                                        <i class="am-icon-image"></i>
-                                    </a>
-                                </form>
-                            </div>
-                            <div class="am-btn-group">
-                                <form method="post" enctype="multipart/form-data" id="fileFormId">
-                                    <input type="file" name="files" multiple='mutiple'>
-                                    <a class="am-btn am-btn-primary" href="#">
-                                        <i class="am-icon-file"></i>
-                                    </a>
-                                </form>
-                            </div>
-                        </div>
-                    </footer>
-                </section>
-                <div class="am-input-group">
-                    <input type="text" class="am-form-field" placeholder="请输入聊天内容" id="chatText">
-                        <span class="am-input-group-label">
-                            <a class="am-btn am-btn-primary" href="#" id="sendBtn">
-                                <i class="am-icon-send"></i>
-                                发送
-                            </a>
-                        </span>
+                    <div class="am-tab-panel">
+                        <ul class="groupList">
+
+                        </ul>
+                    </div>
                 </div>
             </div>
+
         </div>
-    </div>
 
-    <div class="am-modal am-modal-no-btn" tabindex="-1" id="login-model">
-        <div class="am-modal-dialog">
-            <div class="am-modal-hd">用户登录
-                <!--<a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>-->
-            </div>
-            <div class="am-modal-bd">
-                <form class="am-form am-form-horizontal">
-                    <div class="am-form-group">
-                        <label for="doc-ipt-3" class="am-u-sm-2 am-form-label">用户名</label>
-                        <div class="am-u-sm-10">
-                            <input type="text" name="username" placeholder="请输入用户名">
-                        </div>
-                    </div>
+        <div class="am-panel-default  am-u-sm-8 am-u-xs-8">
+            <section class=" am-panel am-panel-primary">
+                <header class="am-panel-hd">
+                    <h3 class="am-panel-title" id="myNicName">昵称</h3>
+                </header>
+                <div class="am-panel-bd" id="messageListBox">
 
-                    <div class="am-form-group">
-                        <label for="doc-ipt-pwd-2" class="am-u-sm-2 am-form-label">密码</label>
-                        <div class="am-u-sm-10">
-                            <input type="password" name="password" placeholder="请输入密码">
+                </div>
+                <footer class="am-panel-footer">
+                    <div class="am-btn-toolbar">
+                        <div class="am-btn-group">
+                            <div class="am-slider am-slider-default emjoyPanel" id="emjoy-slider">
+                                <ul class="am-slides"></ul>
+                            </div>
+                            <a class="am-btn am-btn-primary" id="selectEmjoy">
+                                <i class="am-icon-smile-o"></i>
+                            </a>
+                        </div>
+                        <div class="am-btn-group">
+                            <form method="post" enctype="multipart/form-data" id="imgFormId">
+                                <input type="file" class="input-cover" name=files>
+                                <a class="am-btn am-btn-primary" href="#">
+                                    <i class="am-icon-image"></i>
+                                </a>
+                            </form>
+                        </div>
+                        <div class="am-btn-group">
+                            <form method="post" enctype="multipart/form-data" id="fileFormId">
+                                <input type="file" name="files" multiple='mutiple'>
+                                <a class="am-btn am-btn-primary" href="#">
+                                    <i class="am-icon-file"></i>
+                                </a>
+                            </form>
                         </div>
                     </div>
-
-                    <div class="am-form-group">
-                        <div class="am-u-sm-2 am-u-sm-offset-9">
-                            <button type="button" class="am-btn am-btn-primary" onclick="login()">登录</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="am-modal am-modal-no-btn" tabindex="-1" id="personalInfo">
-        <div class="am-modal-dialog">
-            <div class="am-modal-hd">个人信息修改
-                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
-            </div>
-            <div class="am-modal-bd">
-                <form class="am-form am-form-horizontal" id="userInfoImg" enctype="multipart/form-data" method="post">
-                    <div class="am-u-sm-9 am-u-sm-offset-3">
-                        <input type="file" name="files">
-                    </div>
-                </form>
-                <form class="am-form am-form-horizontal" id="userInfo">
-                    <div class="am-form-group">
-                        <label class="am-u-sm-3 am-form-label">用户头像</label>
-                        <div class="am-u-sm-9 am-text-left">
-                            <img src="/images/shuijiao.jpg" alt="" class="am-circle w-h100px">
-                            <input type="text" name="picture">
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">昵称</label>
-                        <div class="am-u-sm-9">
-                            <input type="text" name="nickName" placeholder="请输入昵称">
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">生日</label>
-                        <div class="am-u-sm-9">
-                            <input type="text"2 name="birthday" id="birthday" placeholder="请选择生日" readonly/>
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">地址</label>
-                        <div class="am-u-sm-9">
-                            <input type="text" name="address" placeholder="请输入地址">
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">邮箱</label>
-                        <div class="am-u-sm-9">
-                            <input type="email" name="email" placeholder="请输入邮箱">
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">电话</label>
-                        <div class="am-u-sm-9">
-                            <input type="tel" name="tel" placeholder="请输入电话">
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <label class="am-u-sm-3 am-form-label">性别</label>
-                        <div class="am-u-sm-9 am-text-left am-margin-top-sm">
-                            <input type="radio" name="sex" value="1">男
-                            <input type="radio" name="sex" value="2">女
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <div class="am-u-sm-2 am-u-sm-offset-9">
-                            <button type="button" class="am-btn am-btn-primary" onclick="saveUserInfo()">保存</button>
-                        </div>
-                    </div>
-                </form>
+                </footer>
+            </section>
+            <div class="am-input-group">
+                <input type="text" class="am-form-field" placeholder="请输入聊天内容" id="chatText">
+                <span class="am-input-group-label">
+                    <a class="am-btn am-btn-primary" href="#" id="sendBtn">
+                        <i class="am-icon-send"></i>
+                        发送
+                    </a>
+                </span>
             </div>
         </div>
     </div>
-    <canvas id="myCanvas" style="display: none"></canvas>
+</div>
+
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="login-model">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">用户登录
+            <!--<a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>-->
+        </div>
+        <div class="am-modal-bd">
+            <form class="am-form am-form-horizontal">
+                <div class="am-form-group">
+                    <label for="doc-ipt-3" class="am-u-sm-2 am-form-label">用户名</label>
+                    <div class="am-u-sm-10">
+                        <input type="text" name="username" placeholder="请输入用户名">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-2 am-form-label">密码</label>
+                    <div class="am-u-sm-10">
+                        <input type="password" name="password" placeholder="请输入密码">
+                    </div>
+                </div>
+
+                <div class="am-g">
+                    <a type="button" class="am-btn am-btn-secondary am-u-sm-4 am-u-sm-offset-1" href="/register">注册</a>
+                    <a type="button" class="am-btn am-btn-primary am-u-sm-4 am-u-sm-offset-1" onclick="login()">登录</a>
+                    <a href="/forgetPwd" class="am-align-right" style="padding-top: 10px;">忘记密码?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="personalInfo">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">个人信息修改
+            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd">
+            <form class="am-form am-form-horizontal" id="userInfoImg" enctype="multipart/form-data" method="post">
+                <div class="am-u-sm-9 am-u-sm-offset-3">
+                    <input type="file" name="files">
+                </div>
+            </form>
+            <form class="am-form am-form-horizontal" id="userInfo">
+                <div class="am-form-group">
+                    <label class="am-u-sm-3 am-form-label">用户头像</label>
+                    <div class="am-u-sm-9 am-text-left">
+                        <img src="/images/shuijiao.jpg" alt="" class="am-circle w-h100px">
+                        <input type="text" name="picture">
+                    </div>
+                </div>
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">昵称</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="nickName" placeholder="请输入昵称">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">生日</label>
+                    <div class="am-u-sm-9">
+                        <input type="text"2 name="birthday" id="birthday" placeholder="请选择生日" readonly/>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">地址</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="address" placeholder="请输入地址">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">邮箱</label>
+                    <div class="am-u-sm-9">
+                        <input type="email" name="email" placeholder="请输入邮箱">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">电话</label>
+                    <div class="am-u-sm-9">
+                        <input type="tel" name="tel" placeholder="请输入电话">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label class="am-u-sm-3 am-form-label">性别</label>
+                    <div class="am-u-sm-9 am-text-left am-margin-top-sm">
+                        <input type="radio" name="sex" value="1">男
+                        <input type="radio" name="sex" value="2">女
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <div class="am-u-sm-2 am-u-sm-offset-9">
+                        <button type="button" class="am-btn am-btn-primary" onclick="saveUserInfo()">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-prompt" tabindex="-1" id="mySearch">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            <div class="am-text-left">
+                <select data-am-selected="{btnWidth: '40%', btnSize: 'sm', btnStyle: 'secondary'}" id="mySearchSelect">
+                    <option value="1">好友</option>
+                    <option value="2">群</option>
+                </select>
+
+            </div>
+            <div class="am-input-group am-input-group-primary">
+                <input type="text" class="am-form-field" placeholder="请输入账号">
+                  <span class="am-input-group-btn">
+                    <button class="am-btn am-btn-primary" type="button" id="searchById"><span class="am-icon-search"></span></button>
+                  </span>
+            </div>
+            <div class="searchResult am-text-left">
+                <!--分组:-->
+                <!--<select data-am-selected="{btnWidth: '30%', btnSize: 'sm', btnStyle: 'secondary'}" id="mySearchSelect" class="am-align-left">-->
+                    <!--<option value="1">好友</option>-->
+                    <!--<option value="2">群</option>-->
+                <!--</select>-->
+                <!--<img src="/images/shuijiao.jpg" alt="" class="am-circle"/>-->
+                <!--<span>1234</span>-->
+                <!--<button class="am-btn am-btn-primary am-align-right" type="button"><span class="am-icon-plus"></span></button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<canvas id="myCanvas" style="display: none"></canvas>
 </body>
 <script src="/js/socket.io.js"></script>
 <script src="/js/jquery.js"></script>
@@ -196,212 +254,7 @@
 <script src="/js/socketHandle.js"></script>
 <script src="/js/MessageHandle.js"></script>
 <script src="/js/fileHandle.js"></script>
+<script src="/js/ListHandle.js"></script>
 <script src="/js/particles-js.js"></script>
-<script type="text/javascript">
-    localStorage.setItem("userObj","");
-    var userObj = {
-        nick:"",
-        uId:"",
-        picture : ""
-    }
-
-    var receiveUserObj = {
-        nick:"" ,
-        uId:"" ,
-        picture : ""
-    }
-
-    var socketHandle;
-
-    jQuery(document).ready(function () {
-        $("#login-model").modal({
-            closeViaDimmer:false
-        });
-//      $("#personalInfo").modal();
-
-    });
-
-    /**
-     * 登录实现
-     */
-    function login() {
-        var username = $("input[name='username']").val();
-        var password = $("input[name='password']").val();
-        $.post("/users/loginCheck",{username:username,password:password},function(data){
-            if(data.resultCode != 0){
-                alert(data.message);
-            }else{
-                //初始化用户对象
-                userObj.nick = data.resultObj.nickName;
-                userObj.uId = "uId"+data.resultObj.id;
-                userObj.picture = data.resultObj.picture;
-                $("#myId").text(userObj.nick);
-                localStorage.setItem("userObj",JSON.stringify(data.resultObj));
-                //初始化socket连接
-                socketHandle = new SocketHandle();
-                socketHandle.init();
-                userObj.id = socketHandle.getSocketId();
-                socketHandle.login(userObj);
-                $('#login-model').modal("toggle");
-                //初始化文件处理
-                var fileHandle = new FileHandle();
-                fileHandle.init();
-                renderDataToUserForm(localStorage.getItem("userObj"));
-                $(".myUserInfo").click(function(){
-                    $("#personalInfo").modal();
-                })
-
-
-            }
-        })
-    }
-
-    /**
-     * 更新用户信息
-     */
-    function saveUserInfo(){
-        $.ajax({
-            url: '/users/updateInfo',
-            type: 'get',
-            data: $("#userInfo").serialize(),
-            async: true,
-            cache: false,
-            contentType: false,
-            processData: false,
-            beforeSend: function (data) {
-                progress.set(0.4);
-            },
-            complete: function (data) {
-                progress.done(true);
-            },
-            success: function (returnData) {
-                progress.inc();
-                if(returnData.resultCode == 0){
-                    localStorage.setItem("userObj",JSON.stringify(returnData.resultObj));
-                }else{
-                    alert(returnData.message);
-                }
-                renderDataToUserForm(localStorage.getItem("userObj"));
-                $("#personalInfo").modal("toggle");
-            },
-            error: function (returnData) {
-                console.log(returnData);
-            }
-        });
-    }
-
-    /**
-     * 初始化进度条
-     */
-    var progress = $.AMUI.progress;
-    progress.configure({
-        minimum: 0.1,
-        easing: 'ease-in-out',
-        positionUsing: '',
-        speed: 200,
-        trickle: true,
-        trickleRate: 0.02,
-        trickleSpeed: 800,
-        showSpinner: true,
-        barSelector: '[role="nprogress-bar"]',
-        spinnerSelector: '[role="nprogress-spinner"]',
-        parent: 'body',
-        template: '<div class="nprogress-bar" role="nprogress-bar">' +
-        '<div class="nprogress-peg"></div></div>' +
-        '<div class="nprogress-spinner" role="nprogress-spinner">' +
-        '<div class="nprogress-spinner-icon"></div></div>'
-    })
-
-    var birthdayView;
-    $(document).ready(function(){
-        initEmjoyPanel();
-        //初始化日期选择控件
-        $(function() {
-            var nowTemp = new Date();
-            var nowDay = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0).valueOf();
-            var nowMoth = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), 1, 0, 0, 0, 0).valueOf();
-            var nowYear = new Date(nowTemp.getFullYear(), 0, 1, 0, 0, 0, 0).valueOf();
-            var $birthday = $('#birthday');
-            birthdayView = $birthday.datepicker({
-                onRender: function(date, viewMode) {
-                    // 默认 days 视图，与当前日期比较
-                    var viewDate = nowDay;
-
-                    switch (viewMode) {
-                        // moths 视图，与当前月份比较
-                        case 1:
-                            viewDate = nowMoth;
-                            break;
-                        // years 视图，与当前年份比较
-                        case 2:
-                            viewDate = nowYear;
-                            break;
-                    }
-
-                    return date.valueOf() > viewDate ? 'am-disabled' : '';
-                }
-            }).data('amui.datepicker');
-        })
-    })
-
-    /**
-     * 初始化表情选择
-     **/
-    function initEmjoyPanel(){
-        var html = "";
-        for(var i=0;i<=170;i++){
-            if(i%40===0){
-                html += "<li>";
-            }
-            if(i%8===0){
-                html += "<img src='/emjoy/"+i+".png' class='isLeft' emjoy-target='[:emjoy"+i+"]'/>";
-            }else{
-                html += "<img src='/emjoy/"+i+".png' emjoy-target='[:emjoy"+i+"]'/>";
-            }
-            if(i%40 === 39 || i===170){
-                html += "</li>"
-            }
-        }
-        $("#emjoy-slider ul").html(html);
-        $("#emjoy-slider").flexslider({
-            animation: "slide",
-            easing: "swing",
-            direction: "horizontal",
-            animationLoop: false,
-            slideshow:false,
-            directionNav:false
-        })
-        $("#emjoy-slider ul li img").click(function(){
-            document.getElementById("chatText").value += $(this).attr("emjoy-target");
-        })
-//        $("#emjoy-slider").hide();
-        $("#emjoy-slider").mouseleave(function(){
-            $("#emjoy-slider").hide();
-        })
-        $("#selectEmjoy").click(function(){
-            $("#emjoy-slider").toggle();
-        })
-
-    }
-
-    /**
-     * 将数据渲染到个人信息弹窗
-     */
-    function renderDataToUserForm(data){
-        var userObj = JSON.parse(data);
-        $(".myUserInfo img").attr("src",userObj.picture || "");
-        $("#myId").text(userObj.nickName || "");
-        document.querySelector("#userInfo input[name='picture']").value = userObj.picture || "";
-        document.querySelector("#userInfo img").src = userObj.picture || "";
-        document.querySelector("#userInfo input[name='nickName']").value = userObj.nickName || "";
-//        document.querySelector("#userInfo input[name='birthday']").value = (userObj.birthday  || "").substring(0,10);
-        birthdayView.setValue(userObj.birthday  || "");
-        document.querySelector("#userInfo input[name='address']").value = userObj.address || "";
-        document.querySelector("#userInfo input[name='email']").value = userObj.email || "";
-        document.querySelector("#userInfo input[name='tel']").value = userObj.tel || "";
-        if(userObj.sex != null){
-            document.querySelectorAll("#userInfo input[name='sex']")[userObj.sex-1].checked = true;
-        }
-    }
-</script>
+<script src="/js/index.js"></script>
 </html>

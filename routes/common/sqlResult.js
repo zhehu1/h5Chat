@@ -64,8 +64,6 @@ sqlResult.prototype.isErr = function(err){
 }
 
 sqlResult.prototype.exeSuccess = function(data){
-    console.log("=========");
-    console.log(data);
     return affectNo(data);
 }
 
