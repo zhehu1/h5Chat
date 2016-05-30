@@ -60,7 +60,7 @@
                             validSuccess(validity.field);
                             validity.valid = true;
                         }else{
-                            validErr(validity.field,data.message);
+                            validErr(validity.field,"该用户已存在!");
                             validity.valid = false;
                         }
                         return validity;

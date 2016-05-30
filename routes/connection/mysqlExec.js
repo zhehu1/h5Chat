@@ -17,15 +17,8 @@ sqlExec.prototype.exe = function(sql,params,callback){
         connection.query(sql,params || [],function(err,result){
             //错误处理
             if(err){
-                if(err.errno == 1062){
-                    if(err){
-                        if(err.errno == 1062){
-                            callback(sqlResult.isErr(err));
-                            return;
-                        }
-                    }
-                    return;
-                }
+                callback(sqlResult.isErr(err));
+                return;
             }
             callback(sqlResult.exeSuccess(result));
         });

@@ -33,7 +33,6 @@ MessageHandle.prototype = {
                     $("#chatText").val("");
                     if(content != ""){
                         that.addToMsgBox(content,false);
-                        //socket.sendMsg(content);
                         socket.sendTextMsg(content);
                     }
                 }
@@ -97,9 +96,9 @@ MessageHandle.prototype = {
         var html = "";
         var tpl = "";
         if(isSend){
-            tpl = '<div class="message left am-animation-slide-bottom"> <img src="'+receiveUserObj.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+            tpl = '<div class="message left am-animation-slide-bottom"><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
         }else{
-            tpl = '<div class="message right am-animation-slide-bottom"> <img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+            tpl = '<div class="message right am-animation-slide-bottom"> <div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
         }
         html += content.map(function(item){
             return tpl.replace("{{linkPath}}",content.linkPath).replace("{{name}}",item.name);
@@ -124,58 +123,37 @@ MessageHandle.prototype = {
     }
 }
 
-/**
- * 用户点击
- * @param t
- * @param e
- * @returns {boolean}
- */
-function mouseClickUser(t,e){
-    var currEle = t;
-    var mouseBtnNum = e.button;
-    if(mouseBtnNum == 0){
-        //鼠标左键点击
-        $(currEle).addClass("active").siblings().removeClass("active");
-        receiveUserObj.uId = $(currEle).attr("userId");
-        receiveUserObj.nick = $(currEle).find("span").text();
-        receiveUserObj.picture = $(currEle).find("img").attr("src");
-        receiveUserObj.type = 1;
-        $("#myNicName").text("正在与"+receiveUserObj.nick+"聊天");
-    }else if(mouseBtnNum == 1){
-        //鼠标中键点击
+function renderMsgRecord(data){
+    var msg = JSON.parse(data.msg);
 
-    }else if(mouseBtnNum == 2){
-        //鼠标右键点击
-        console.log(2)
-        alert(2);
+    var isSend = msg.from.uId == userObj.uId?true:false;
+    console.log(msg.from.uId,isSend)
+    var type = data.type;
+    var isGroup = data.isGroup;
+    var currUserObj = msg.from;
+    var currReceiveObj = msg.to;
+    var html = "";
+    if(type === 1 || type === "1"){
+        if(isSend){
+            html += '<div class="message left am-animation-slide-bottom"> <img src="'+currReceiveObj.picture+'" alt="" class="am-circle"/><div class="body">'+msg.msg+'</div></div>';
+        }else{
+            html += '<div class="message right am-animation-slide-bottom"><img src="'+currUserObj.picture+'" alt="" class="am-circle"/><div class="body">'+msg.msg+'</div></div>';
+        }
+    }else if(type === 2 || type === 2){
+        if(isSend){
+            html += '<div class="message left am-animation-slide-bottom"> <img src="'+currReceiveObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+msg.msg[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+        }else{
+            html += '<div class="message right am-animation-slide-bottom"><img src="'+currUserObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+msg.msg[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+        }
+    }else{
+        if(isSend){
+            tpl = '<div class="message left am-animation-slide-bottom"><img src="'+currReceiveObj.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+        }else{
+            tpl = '<div class="message right am-animation-slide-bottom"><img src="'+currUserObj.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+        }
+        html += Array.from(msg.msg).map(function(item){
+            return tpl.replace("{{linkPath}}",item.linkPath).replace("{{name}}",item.name);
+        }).join("");
     }
-    return true;
-}
-
-/**
- * 群组点击
- * @param t
- * @param e
- * @returns {boolean}
- */
-function mouseClickGroup(t,e){
-    var currEle = t;
-    var mouseBtnNum = e.button;
-    if(mouseBtnNum == 0){
-        //鼠标左键点击
-        $(currEle).addClass("active").siblings().removeClass("active");
-        receiveUserObj.uId = $(currEle).attr("groupId");
-        receiveUserObj.nick = $(currEle).find("span").text();
-        receiveUserObj.picture = "";
-        receiveUserObj.type = 2;
-        $("#myNicName").text("正在与 "+receiveUserObj.nick+" 聊天");
-    }else if(mouseBtnNum == 1){
-        //鼠标中键点击
-
-    }else if(mouseBtnNum == 2){
-        //鼠标右键点击
-        console.log(2)
-        alert(2);
-    }
-    return true;
+    $("#messageListBox").prepend(html);
 }

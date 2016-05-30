@@ -17,6 +17,12 @@ var forgetPwd = {
                     +"left join HTML5Chat.chat_groupUser as b "
                     +"on a.groupId = b.groupId "
                     +"where b.userId = ?; ",
+    searchGroupById : "SELECT groupId,groupName FROM HTML5Chat.chat_group where groupId = ?;",
+    verifyIUserInGroupById : "SELECT * FROM HTML5Chat.chat_groupUser where groupId = ? AND userId = ?;",
+    addUserToGroupById : "INSERT INTO `HTML5Chat`.`chat_groupUser` (`groupId`, `userId`) VALUES (?, ?);",
+    exitGroup : "DELETE FROM `HTML5Chat`.`chat_groupUser` WHERE `userId`=? AND `groupId`=?;",
+    createGroup : "INSERT INTO `HTML5Chat`.`chat_group` (`groupName`, `create_by`) VALUES (?, ?);",
+    updateGroupName : "UPDATE `HTML5Chat`.`chat_group` SET `groupName`=? WHERE `groupId`=?;"
 };
 
 module.exports =  forgetPwd;

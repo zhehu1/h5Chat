@@ -16,9 +16,26 @@ chatMessageService.prototype.insertMsg = function(parsms,cb){
             //cb(0,"插入成功!");
             cb(0,data);
         }else if(data.code == -1){
-            cb(1,"插入失败!");
-        }else{
             cb(1,"数据库异常!");
+        }else{
+            cb(1,"插入失败!");
+        }
+    })
+}
+
+/**
+ * 获取聊天记录
+ * @param params
+ * @param cb
+ */
+chatMessageService.prototype.getMsgRecord = function(params,cb){
+    chatMessageDao.getMsgRecord(params,function(data){
+        if(data.code == 0){
+            cb(0,data);
+        }else if(data.code == -1){
+            cb(1,"数据库异常!");
+        }else{
+            cb(1,"查询失败,请稍后再试!");
         }
     })
 }

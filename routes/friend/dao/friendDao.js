@@ -44,5 +44,48 @@ friendDao.prototype.addFriend = function(params,cb){
     sqlExec.exe(friendSql.addFriend,params,cb);
 }
 
+/**
+ * 修改分组
+ * @param params
+ * @param cb
+ */
+friendDao.prototype.changeSet = function(params,cb){
+    sqlExec.exe(friendSql.changeSet,params,cb);
+}
 
+/**
+ * 删除好友
+ * @param params
+ * @param cb
+ */
+friendDao.prototype.deleteFriend = function(params,cb){
+    sqlExec.exe(friendSql.deleteFriend,params,cb);
+}
+
+/**
+ * 创建新好友分组
+ * @param params
+ * @param cb
+ */
+friendDao.prototype.createSet = function(params,cb){
+    sqlExec.exe(friendSetSql.createSet,params,cb);
+}
+
+/**
+ * 修改分组名称
+ * @param params
+ * @param cb
+ */
+friendDao.prototype.changeSetName = function(params,cb){
+    sqlExec.exe(friendSetSql.updateSetName,params,cb);
+}
+
+/**
+ * 删除分组
+ * @param params
+ * @param cb
+ */
+friendDao.prototype.deleteSet = function(params,cb){
+    sqlExec.exe(friendSetSql.deleteSet,params,cb);
+}
 module.exports = friendDao;

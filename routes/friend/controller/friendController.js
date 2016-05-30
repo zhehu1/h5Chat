@@ -22,14 +22,15 @@ router.get('/', function(req, res, next) {
         return;
     }
     id = req.session.userObj.id;
-    friendService.getFriends(id,function(code,message){
-        if(code == 0){
-            res.send(ajaxResult.returnSuccess(Tool.groupArrByKey(message.resultObj,"setName")));
-            //res.send(ajaxResult.returnSuccess("123"));
-        }else{
-            res.send(ajaxResult.returnError(message.message));
-        }
-    })
+    friendService.getFriendSet([id],function(code,data) {
+        friendService.getFriends(id, function (code, message) {
+            if (code == 0) {
+                res.send(ajaxResult.returnSuccess({set:Tool.toArray(data),friend:Tool.groupArrByKey(message.resultObj, "setName")}));
+            } else {
+                res.send(ajaxResult.returnError(message.message));
+            }
+        })
+    });
 });
 
 /**
@@ -94,13 +95,140 @@ router.get("/addFriend",function(req,res,next){
         if(code == 0){
             friendService.addFriend([id,friendId,setId],function(code,data){
                 if(code == 0){
-                    res.send(ajaxResult.returnSuccess(data));
+                    res.send(ajaxResult.returnSuccess(data.resultObj));
                 }else{
                     res.send(ajaxResult.returnError(data.message));
                 }
             })
         }else{
+            res.send(ajaxResult.returnError("你们已经是好友了!"));
+        }
+    })
+})
+
+
+/**
+ * 修改分组
+ */
+router.get("/changeSet",function(req,res,next){
+    var setId = req.query.setId || "";
+    var friendId = req.query.friendId || "";
+    var id = "";
+    if(typeof req.session.userObj == "undefined"){
+        res.send(ajaxResult.returnError("请登录后再试!"));
+        return;
+    }
+    id = req.session.userObj.id;
+    friendService.changeSet([setId,friendId,id],function(code,data){
+        if(code == 0){
+            res.send(ajaxResult.returnSuccess(data.resultObj));
+        }else{
             res.send(ajaxResult.returnError(data.message));
+        }
+    });
+})
+
+/**
+ * 删除好友
+ */
+router.get("/deleteFriend",function(req,res,next){
+    var friendId = req.query.friendId || "";
+    var id = "";
+    if(typeof req.session.userObj == "undefined"){
+        res.send(ajaxResult.returnError("请登录后再试!"));
+        return;
+    }
+    id = req.session.userObj.id;
+    friendService.deleteFriend([friendId,id],function(code,data){
+        if(code == 0){
+            res.send(ajaxResult.returnSuccess(data.resultObj));
+        }else{
+            res.send(ajaxResult.returnError(data.message));
+        }
+    })
+})
+
+/**
+ * 新建分组
+ */
+router.get("/createSet",function(req,res,next){
+    var name = req.query.name || "";
+    var id = "";
+    if(typeof req.session.userObj == "undefined"){
+        res.send(ajaxResult.returnError("请登录后再试!"));
+        return;
+    }
+    id = req.session.userObj.id;
+    if(name == ""){
+        res.send(ajaxResult.returnError("名称不能为空!"));
+        return;
+    }
+    friendService.createSet([id,name],function(code,data){
+        if(code == 0){
+            res.send(ajaxResult.returnSuccess(data.resultObj));
+        }else{
+            res.send(ajaxResult.returnError(data.message));
+        }
+    })
+})
+
+/**
+ * 获得分组
+ */
+router.get("/getFriendSet",function(req,res){
+    var id = "";
+    if(typeof req.session.userObj == "undefined"){
+        res.send(ajaxResult.returnError("请登录后再试!"));
+        return;
+    }
+    id = req.session.userObj.id;
+
+    friendService.getFriendSet([id],function(code,data){
+        if(code == 0){
+            res.send(ajaxResult.returnSuccess(Tool.toArray(data)));
+        }else{
+            res.send(ajaxResult.returnError(data.message));
+        }
+    })
+})
+
+/**
+ * 修改分组名称
+ */
+router.get("/changeSetName",function(req,res){
+    var setId = req.query.id;
+    var setName = req.query.name;
+    var id = "";
+    if(typeof req.session.userObj == "undefined"){
+        res.send(ajaxResult.returnError("请登录后再试!"));
+        return;
+    }
+    id = req.session.userObj.id;
+    friendService.changeSetName([setName,setId,id],function(code,data){
+        if(code == 0){
+            res.send(ajaxResult.returnSuccess(data));
+        }else{
+            res.send(ajaxResult.returnError(data));
+        }
+    })
+});
+
+/**
+ * 删除分组
+ */
+router.get("/deleteSet",function(req,res){
+    var setId = req.query.id;
+    var id = "";
+    if(typeof req.session.userObj == "undefined"){
+        res.send(ajaxResult.returnError("请登录后再试!"));
+        return;
+    }
+    id = req.session.userObj.id;
+    friendService.deleteSet([setId,id],function(code,data){
+        if(code == 0){
+            res.send(ajaxResult.returnSuccess(data));
+        }else{
+            res.send(ajaxResult.returnError(data));
         }
     })
 })

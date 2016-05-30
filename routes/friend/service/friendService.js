@@ -73,4 +73,91 @@ friendService.prototype.addFriend = function(params,cb){
     })
 }
 
+/**
+ * 修改分组
+ * @param params
+ * @param cb
+ */
+friendService.prototype.changeSet = function(params,cb){
+    friendDao.changeSet(params,function(data){
+        if(data.code == 0){
+            cb(0,data);
+        }else if(data.code == -1){
+            cb(1,"修改失败!");
+        }else{
+            cb(1,"数据库异常!");
+        }
+    })
+}
+
+/**
+ * 删除好友
+ * @param params
+ * @param cb
+ */
+friendService.prototype.deleteFriend = function(params,cb){
+    friendDao.deleteFriend(params,function(data){
+        if(data.code == 0){
+            cb(0,data);
+        }else if(data.code == -1){
+            cb(1,"删除失败!");
+        }else{
+            cb(1,"数据库异常!");
+        }
+    })
+}
+
+/**
+ * 创建分组
+ * @param params
+ * @param cb
+ */
+friendService.prototype.createSet = function(params,cb){
+    friendDao.createSet(params,function(data){
+        if(data.code == 0){
+            cb(0,data);
+        }else if(data.code == -1){
+            cb(1,"数据库异常!");
+        }else{
+            cb(1,"新建失败,请稍后再试!");
+        }
+    })
+}
+
+/**
+ * 修改分类名
+ * @param params
+ * @param cb
+ */
+friendService.prototype.changeSetName = function(params,cb){
+    friendDao.changeSetName(params,function(data){
+        if(data.code == 0){
+            cb(0,data);
+        }else if(data.code == -1){
+            cb(1,"数据库异常!");
+        }else{
+            cb(1,"修改失败,请稍后再试!");
+        }
+    })
+}
+
+/**
+ * 删除分组
+ * @param params
+ * @param cb
+ */
+friendService.prototype.deleteSet = function(params,cb){
+    friendDao.deleteSet(params,function(data){
+        if(data.code == 0){
+            cb(0,data);
+        }else if(data.code == -1){
+            cb(1,"数据库异常!");
+        }else if(data.code == -2) {
+            cb(1,"请清空分组再删除!")
+        }else{
+            cb(1,"删除失败,请稍后再试!");
+        }
+    })
+}
+
 module.exports = friendService;

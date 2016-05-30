@@ -18,6 +18,14 @@ function errHandle(err){
             resultObj:{}
         };
     }
+    if(err.errno == 1451){
+        return {
+            code : -2,
+            message : "外键关联错误!",
+            affectedRows:0,
+            resultObj:{}
+        };
+    }
 }
 
 /**

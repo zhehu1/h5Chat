@@ -26,11 +26,11 @@
                         <button data-am-modal="{target: '#personalInfo'}" class="am-btn am-u-sm-4 am-btn-primary">
                             <span class="am-icon-edit"></span>
                         </button>
-                        <button class="am-btn  am-u-sm-4 am-btn-primary" id="userAdd">
+                        <button class="am-btn  am-u-sm-4 am-btn-primary" data-am-modal="{target: '#mySearch'}">
                             <span class="am-icon-user-plus"></span>
                         </button>
-                        <button class="am-btn am-u-sm-4 am-btn-primary" id="groupAdd">
-                            <span class="am-icon-users"></span>
+                        <button class="am-btn am-u-sm-4 am-btn-primary" data-am-modal="{target: '#newSetOrGroup'}">
+                            <span class="am-icon-plus"></span>
                         </button>
                     </div>
                 </div>
@@ -67,8 +67,9 @@
 
         <div class="am-panel-default  am-u-sm-8 am-u-xs-8">
             <section class=" am-panel am-panel-primary">
-                <header class="am-panel-hd">
+                <header class="am-panel-hd" style="position: relative">
                     <h3 class="am-panel-title" id="myNicName">昵称</h3>
+                    <span class="am-icon-refresh" style="position: absolute;top: .6rem;right: 1.25rem;cursor: pointer" onclick="refreshRecord()"></span>
                 </header>
                 <div class="am-panel-bd" id="messageListBox">
 
@@ -98,6 +99,11 @@
                                     <i class="am-icon-file"></i>
                                 </a>
                             </form>
+                        </div>
+                        <div class="am-btn-group" style="float: right;">
+                            <a class="am-btn am-btn-primary" href="javascript:downloadChatRecord()">
+                                聊天记录下载<i class="am-icon-download"></i>
+                            </a>
                         </div>
                     </div>
                 </footer>
@@ -157,6 +163,12 @@
                 </div>
             </form>
             <form class="am-form am-form-horizontal" id="userInfo">
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">用户id</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="userId" disabled="disabled">
+                    </div>
+                </div>
                 <div class="am-form-group">
                     <label class="am-u-sm-3 am-form-label">用户头像</label>
                     <div class="am-u-sm-9 am-text-left">
@@ -224,7 +236,6 @@
                     <option value="1">好友</option>
                     <option value="2">群</option>
                 </select>
-
             </div>
             <div class="am-input-group am-input-group-primary">
                 <input type="text" class="am-form-field" placeholder="请输入账号">
@@ -233,15 +244,133 @@
                   </span>
             </div>
             <div class="searchResult am-text-left">
-                <!--分组:-->
-                <!--<select data-am-selected="{btnWidth: '30%', btnSize: 'sm', btnStyle: 'secondary'}" id="mySearchSelect" class="am-align-left">-->
-                    <!--<option value="1">好友</option>-->
-                    <!--<option value="2">群</option>-->
-                <!--</select>-->
-                <!--<img src="/images/shuijiao.jpg" alt="" class="am-circle"/>-->
-                <!--<span>1234</span>-->
-                <!--<button class="am-btn am-btn-primary am-align-right" type="button"><span class="am-icon-plus"></span></button>-->
+
             </div>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-prompt" tabindex="-1" id="newSetOrGroup">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            <div class="am-text-left">
+                <select data-am-selected="{btnWidth: '40%', btnSize: 'sm', btnStyle: 'secondary'}" id="myCreateSelectType">
+                    <option value="1">新建分组</option>
+                    <option value="2">新建群</option>
+                </select>
+            </div>
+            <div class="am-input-group am-input-group-primary">
+                <input type="text" class="am-form-field" placeholder="请输入名称">
+                  <span class="am-input-group-btn">
+                    <button class="am-btn am-btn-primary" type="button" onclick="createSetOrGroup(this)"><span class="am-icon-plus"></span></button>
+                  </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-prompt" tabindex="-1" id="changeName">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            <span>名称</span>
+            <div class="am-input-group am-input-group-primary">
+                <input type="text" class="am-form-field" placeholder="请输入名称">
+                  <span class="am-input-group-btn">
+                    <button class="am-btn am-btn-primary" type="button" onclick="changeName()"><span class="am-icon-save"></span></button>
+                  </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-prompt" tabindex="-1" id="changeFriendSet">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            <div class="am-align-left">
+               修改分组
+            </div>
+            <select data-am-selected="{btnWidth: '40%', btnSize: 'sm', btnStyle: 'secondary'}" id="changeFriendSetSelect">
+            </select>
+            <button class="am-btn am-btn-primary am-align-right" type="button" onclick="changeFriendSet()"><span class="am-icon-save"></span></button>
+        </div>
+    </div>
+</div>
+<div class="mouseRightClick" id="friendRightClick">
+    <div class="am-btn-group-stacked">
+        <button type="button" class="am-btn am-btn-secondary" onclick="sendFriendMsg()">发送消息</button>
+        <button type="button" class="am-btn am-btn-secondary" onclick="showFriendInfo()">查看资料</button>
+        <button type="button" class="am-btn am-btn-secondary" onclick="changeSet()">更换分组</button>
+        <button type="button" class="am-btn am-btn-secondary" onclick="deleteFriend()">删除好友</button>
+    </div>
+</div>
+<div class="mouseRightClick" id="groupRightClick">
+    <div class="am-btn-group-stacked">
+        <button type="button" class="am-btn am-btn-secondary" onclick="sendGroupMsg()">发送消息</button>
+        <button type="button" class="am-btn am-btn-secondary" onclick="changeGroupNameClick()">修改名称</button>
+        <button type="button" class="am-btn am-btn-secondary" onclick="exitGroup()">退出群组</button>
+    </div>
+</div>
+<div class="mouseRightClick" id="setRightClick">
+    <div class="am-btn-group-stacked">
+        <button type="button" class="am-btn am-btn-secondary" onclick="changeSetName()">修改名称</button>
+        <button type="button" class="am-btn am-btn-secondary" onclick="deleteSet()">删除群组</button>
+    </div>
+</div>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="friendInfo">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            <form class="am-form am-form-horizontal" id="userInfo">
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">用户id</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="userId" disabled="disabled">
+                    </div>
+                </div>
+                <div class="am-form-group">
+                    <label class="am-u-sm-3 am-form-label">用户头像</label>
+                    <div class="am-u-sm-9 am-text-left">
+                        <img src="/images/shuijiao.jpg" alt="" class="am-circle w-h100px">
+                    </div>
+                </div>
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">昵称</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="nickName" placeholder="" disabled="disabled">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">生日</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="birthday" placeholder=""  disabled="disabled"/>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">地址</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="address" placeholder="" disabled="disabled">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">邮箱</label>
+                    <div class="am-u-sm-9">
+                        <input type="email" name="email" placeholder="" disabled="disabled">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="doc-ipt-pwd-2" class="am-u-sm-3 am-form-label">电话</label>
+                    <div class="am-u-sm-9">
+                        <input type="tel" name="tel" placeholder="" disabled="disabled">
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label class="am-u-sm-3 am-form-label">性别</label>
+                    <div class="am-u-sm-9 am-text-left am-margin-top-sm" name="sex">
+                        男
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

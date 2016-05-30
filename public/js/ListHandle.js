@@ -8,23 +8,38 @@ var listHandle ={};
  * @param data
  * @returns {string}
  */
-listHandle.compileFriendList = function(data){
+listHandle.compileFriendList = function(data,setObj){
+    var friendInfo = {};
     var i = 0;
     var list = "";
     var tmpHTML = "";
     for(var key in data){
         var currArr = Array.from(data[key]);
         tmpHTML += '<li class="am-panel">';
-        tmpHTML += '<a data-am-collapse="{parent: \'#friendList-collapase\', target: \'#friendList-collapase'+i+'\'}">';
-        tmpHTML += '<i class="am-margin-left-sm"></i> '+key+' <i class="am-icon-angle-right am-fr am-margin-right"></i>';
+        if(typeof data[key][0] == "undefined"){
+            var currSetObj = {setId:"",setName:""};
+            Array.from(setObj).forEach(function(item){
+                if(item.setName == key){
+                    currSetObj.setId = item.setId;
+                    currSetObj.setName = item.setName;
+                    return ;
+                }
+            })
+            tmpHTML += '<a data-am-collapse="{parent: \'#friendList-collapase\', target: \'#friendList-collapase'+i+'\'}" setId="'+currSetObj.setId+'" setName="'+currSetObj.setName+'">';
+        }else{
+            tmpHTML += '<a data-am-collapse="{parent: \'#friendList-collapase\', target: \'#friendList-collapase'+i+'\'}" setId="'+(data[key][0]["setId"] || "")+'" setName="'+(data[key][0]["setName"] || "")+'">';
+        }
+        tmpHTML += '<i class="am-margin-left-sm"></i> '+key+'&nbsp;&nbsp;&nbsp;&nbsp;('+currArr.length+'人) <i class="am-icon-angle-right am-fr am-margin-right"></i>';
         tmpHTML += '</a>';
         tmpHTML += '<ul class="am-list am-collapse admin-sidebar-sub friendList" id="friendList-collapase'+i+'">';
         currArr.forEach(function(item){
             tmpHTML += '<li class="" userId=\'uId'+item.friendId+'\' onmousedown="mouseClickUser(this,event)"> <img src="'+item.picture+'" alt="" class="am-circle"> <span>'+item.nickName+'</span></li>';
+            friendInfo['uId'+item.friendId] = item;
         });
         tmpHTML += "</ul></li>";
         i++;
     }
+    localStorage.setItem("friendInfo",JSON.stringify(friendInfo));
     return tmpHTML;
 };
 

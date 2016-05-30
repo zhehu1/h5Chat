@@ -37,11 +37,11 @@ router.post('/loginCheck', function(req, res, next) {
  */
 router.get("/checkIsExit",function(req,res,next){
     var loginName = req.query.loginName;
-  userService.checkLoginName([loginName],function(code,message){
+  userService.checkLoginName([loginName],function(code,data){
     if(code != 0){
-      res.send(ajaxResult.returnError(message));
+      res.send(ajaxResult.returnError(data));
     }else{
-      res.send(ajaxResult.returnSuccess(message));
+      res.send(ajaxResult.returnSuccess(data));
     }
   })
 });
@@ -142,14 +142,13 @@ router.get("/forgetPwd",function(req,res,next){
                             res.send(ajaxResult.returnSuccess(dataObj));
                         }
                     })
-
                 }else{
                     res.send(ajaxResult.returnError(dataObj));
                 }
             })
         }
     })
-})
+});
 
 /**
  * 重置密码
@@ -174,6 +173,6 @@ router.post("/forget/resetPwd",function(req,res,next){
             });
         }
     }
-})
+});
 
 module.exports = router;

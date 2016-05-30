@@ -23,6 +23,14 @@ jQuery(document).ready(function () {
     });
 });
 
+document.oncontextmenu=function(){
+    return false;
+}
+
+$(document).click(function(){
+    $(".mouseRightClick").css({"display":"none"});
+})
+
 /**
  * 登录实现
  */
@@ -54,9 +62,6 @@ function login() {
             $(".myUserInfo").click(function(){
                 $("#personalInfo").modal();
             })
-            $('#userAdd').on('click', function() {
-                $('#mySearch').modal();
-            });
             $("#searchById").on("click",function(){
                 var id = $(this).parent().prev().val();
                 var type = $("#mySearchSelect").val();
@@ -68,8 +73,6 @@ function login() {
             });
             initFriendList();
             initGroupList(socketHandle);
-
-
         }
     })
 }
@@ -206,6 +209,7 @@ function renderDataToUserForm(data){
     var userObj = JSON.parse(data);
     $(".myUserInfo img").attr("src",userObj.picture || "");
     $("#myId").text(userObj.nickName || "");
+    document.querySelector("#userInfo input[name='userId']").value = userObj.id || "";
     document.querySelector("#userInfo input[name='picture']").value = userObj.picture || "";
     document.querySelector("#userInfo img").src = userObj.picture || "";
     document.querySelector("#userInfo input[name='nickName']").value = userObj.nickName || "";
@@ -221,6 +225,8 @@ function renderDataToUserForm(data){
 /**
  * 初始化好友列表
  */
+var currMouseClickSet;
+var currMouseClickSetName;
 function initFriendList(){
     $.ajax({
         url: '/friend',
@@ -232,7 +238,14 @@ function initFriendList(){
         processData: false,
         success: function (returnData) {
             if(returnData.resultCode == 0){
-                document.querySelector("#friendList-collapase").innerHTML = listHandle.compileFriendList(returnData.resultObj);
+                document.querySelector("#friendList-collapase").innerHTML = listHandle.compileFriendList(returnData.resultObj.friend,returnData.resultObj.set);
+                $("[setId]").on('mousedown',function(e){
+                    if(e.button === 2){
+                        currMouseClickSet = $(this).attr("setId").match(/[0-9]+/)[0];
+                        currMouseClickSetName = $(this).attr("setName");
+                        $("#setRightClick").css({"left": e.pageX,"top": e.pageY,"display":"block"});
+                    }
+                })
                 $("#friendList-collapase").collapse({
                     toggle: true
                 })
@@ -244,6 +257,68 @@ function initFriendList(){
             console.log(returnData);
         }
     });
+}
+
+
+/**
+ * 用户点击
+ * @param t
+ * @param e
+ * @returns {boolean}
+ */
+var currMouseClickUser;
+function mouseClickUser(t,e){
+    var currEle = t;
+    var mouseBtnNum = e.button;
+    if(mouseBtnNum == 0){
+        //鼠标左键点击
+        $(currEle).addClass("active").siblings().removeClass("active");
+        receiveUserObj.uId = $(currEle).attr("userId");
+        receiveUserObj.nick = $(currEle).find("span").text();
+        receiveUserObj.picture = $(currEle).find("img").attr("src");
+        receiveUserObj.type = 1;
+        $("#myNicName").text("正在与"+receiveUserObj.nick+"聊天");
+    }else if(mouseBtnNum == 1){
+        //鼠标中键点击
+
+    }else if(mouseBtnNum == 2){
+        //鼠标右键点击
+        //alert(e.x+"===="+ e.y);
+        currMouseClickUser = $(currEle).attr("userId").match(/[0-9]+/)[0];
+        $("#friendRightClick").css({"left": e.x,"top": e.y,"display":"block"});
+    }
+    return true;
+}
+
+/**
+ * 群组点击
+ * @param t
+ * @param e
+ * @returns {boolean}
+ */
+var currMouseClickGroup;
+var currMouseClickGroupName;
+function mouseClickGroup(t,e){
+    var currEle = t;
+    var mouseBtnNum = e.button;
+    if(mouseBtnNum == 0){
+        //鼠标左键点击
+        $(currEle).addClass("active").siblings().removeClass("active");
+        receiveUserObj.uId = $(currEle).attr("groupId");
+        receiveUserObj.nick = $(currEle).find("span").text();
+        receiveUserObj.picture = "";
+        receiveUserObj.type = 2;
+        $("#myNicName").text("正在与 "+receiveUserObj.nick+" 聊天");
+    }else if(mouseBtnNum == 1){
+        //鼠标中键点击
+
+    }else if(mouseBtnNum == 2){
+        //鼠标右键点击
+        currMouseClickGroup = $(currEle).attr("groupId").match(/[0-9]+/)[0];
+        currMouseClickGroupName = $(currEle).find("span").text();
+        $("#groupRightClick").css({"left": e.x,"top": e.y,"display":"block"});
+    }
+    return true;
 }
 
 /**
@@ -275,7 +350,7 @@ function initGroupList(socketHandel){
 
 
 /**
- *
+ * 切换tab
  * @param tabIndex
  */
 function changeTab(tabIndex){
@@ -311,7 +386,7 @@ function searchById(id,type){
     if(type === 1 || type === "1"){
         url = "/friend/searchById";
     }else{
-        url = "/friend/searchById";
+        url = "/group/searchGroupById";
     }
     $.ajax({
         url: url,
@@ -371,8 +446,31 @@ function renderSearchFriend(data){
 function addSelect(id){
     var setId = $("#mySearchSelectSet").val();
     var uId = id;
-    console.log("setId"+setId);
-    console.log("uId"+uId);
+    $("#mySearch input").val("");
+    $.ajax({
+        url: "/friend/addFriend",
+        type: 'get',
+        data: "friendId="+uId+"&setId="+setId,
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                $("#mySearch").modal();
+                $(".searchResult").html("");
+                setTimeout(function(){
+                    alert("添加成功!");
+                },0);
+                initFriendList();
+            }else{
+                alert(returnData.message);
+            }
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
 }
 
 /**
@@ -380,5 +478,369 @@ function addSelect(id){
  * @param data
  */
 function renderSearchGroup(data){
+    var groupInfo = data;
+    var tmpHTML = "";
+    tmpHTML += '群组:&nbsp;&nbsp;&nbsp;&nbsp;<i class="am-icon-group am-icon-fw"></i>';
+    tmpHTML += '<span>'+groupInfo.groupName+'</span>';
+    tmpHTML += '<button class="am-btn am-btn-primary am-align-right" type="button" onclick="addSelectGroup(\''+groupInfo.groupId+'\')"><span class="am-icon-plus"></span></button>';
+    $(".searchResult").html(tmpHTML);
+}
+
+/**
+ * 加入群组
+ * @param id
+ */
+function addSelectGroup(id){
+    var groupId = id;
+    $("#mySearch input").val("");
+    $.ajax({
+        url: "/group/addUserToGroup",
+        type: 'get',
+        data: "id="+groupId,
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                $("#mySearch").modal();
+                setTimeout(function(){
+                    alert("添加成功!");
+                },0);
+                initGroupList(socketHandle);
+            }else{
+                alert(returnData.message);
+            }
+            $(".searchResult").html("");
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
+}
+
+/**
+ * 发送消息(好友)
+ */
+function sendFriendMsg(){
 
 }
+
+/**
+ * 查看资料(好友)
+ */
+function showFriendInfo(){
+    var uId = "uId"+currMouseClickUser;
+    var friendInfo = JSON.parse(localStorage.getItem("friendInfo"));
+    var userObj = friendInfo[uId];
+
+    document.querySelector("#friendInfo #userInfo input[name='userId']").value = userObj.friendId || "";
+    document.querySelector("#friendInfo #userInfo img").src = userObj.picture || "";
+    document.querySelector("#friendInfo #userInfo input[name='nickName']").value = userObj.nickName || "";
+    document.querySelector("#friendInfo #userInfo input[name='birthday']").value = userObj.birthday== null?"":userObj.birthday.slice(0,10);
+    document.querySelector("#friendInfo #userInfo input[name='address']").value = userObj.address || "";
+    document.querySelector("#friendInfo #userInfo input[name='email']").value = userObj.email || "";
+    document.querySelector("#friendInfo #userInfo input[name='tel']").value = userObj.tel || "";
+    if(userObj.sex != null){
+        if(userObj.sex == 1){
+            document.querySelector("#friendInfo #userInfo [name='sex']").textContent = "男";
+        }else{
+            document.querySelector("#friendInfo #userInfo [name='sex']").textContent = "女";
+        }
+    }
+    $("#friendInfo").modal();
+}
+
+/**
+ * 修改分组
+ */
+function changeSet(){
+    $.ajax({
+        url: "/friend/getFriendSet",
+        type: 'get',
+        data: "",
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                var tmpHTML = "";
+                Array.from(returnData.resultObj).forEach(function(item){
+                    tmpHTML += "<option value="+item.setId+">"+item.setName+"</option>";
+                });
+                $("#changeFriendSetSelect").html(tmpHTML);
+                $("#changeFriendSetSelect").selected();
+                $("#changeFriendSet").modal();
+            }else{
+                alert(returnData.message);
+            }
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
+}
+
+/**
+ * 修改分组
+ */
+function changeFriendSet(){
+    var setId = $("#changeFriendSetSelect").val();
+    $.ajax({
+        url: "/friend/changeSet",
+        type: 'get',
+        data: "setId="+setId+"&friendId="+currMouseClickUser,
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                setTimeout(function(){
+                   alert("修改成功!");
+                },0);
+                initFriendList();
+                $("#changeFriendSet").modal();
+            }else{
+                alert(returnData.message);
+            }
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
+}
+
+/**
+ * 删除好友
+ */
+function deleteFriend(){
+    $.ajax({
+        url: "/friend/deleteFriend",
+        type: 'get',
+        data: "friendId="+currMouseClickUser,
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                //$("#mySearch").modal();
+                //$(".searchResult").html("");
+                setTimeout(function(){
+                    alert("删除成功!");
+                },0);
+                initFriendList();
+            }else{
+                alert(returnData.message);
+            }
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
+}
+
+/**
+ * 发送消息(群组)
+ */
+function sendGroupMsg(){
+
+}
+
+/**
+ * 退出群组
+ */
+function exitGroup(){
+    $.ajax({
+        url: "/group/exitGroup",
+        type: 'get',
+        data: "groupId="+currMouseClickGroup,
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                setTimeout(function(){
+                    alert("退出成功!");
+                },0);
+                initGroupList(socketHandle);
+            }else{
+                alert(returnData.message);
+            }
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
+}
+
+/**
+ * 创建群组或分组
+ * @param ele
+ */
+function createSetOrGroup(ele) {
+    var currEle = $(ele);
+    var name = $(currEle).parent().prev().val();
+    var type = $("#myCreateSelectType").val();
+    var url = "";
+    if(type === 1 || type === "1"){
+        url = "/friend/createSet";
+    }else{
+        url = "/group/createGroup";
+    }
+    $.ajax({
+        url: url,
+        type: 'get',
+        data: "name="+name,
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                setTimeout(function(){
+                    alert("创建成功!");
+                },0);
+                $("#newSetOrGroup").modal();
+                $(currEle).parent().prev().val("");
+                if(type === 1 || type === "1"){
+                    initFriendList();
+                }else{
+                    initGroupList(socketHandle);
+                }
+            }else{
+                alert(returnData.message);
+            }
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
+}
+
+/**
+ * 点击修改群名称
+ */
+function changeGroupNameClick(){
+    $("#changeName input").val(currMouseClickGroupName).attr("typeId","2");
+    $("#changeName").modal();
+}
+
+/**
+ * 点击修改分组名称
+ */
+function changeSetName(){
+    $("#changeName input").val(currMouseClickSetName).attr("typeId","1");
+    $("#changeName").modal();
+}
+
+/**
+ * 修改名称
+ */
+function changeName(){
+    var type = $("#changeName input").attr("typeId");
+    var name = $("#changeName input").val();
+    var url = "";
+    var id = "";
+    if(name == ""){
+        alert("名称不能为空!");
+        return;
+    }
+    if(type === 1 || type === "1"){
+        url = "/friend/changeSetName";
+        id = currMouseClickSet;
+    }else{
+        url = "/group/changeGroupName";
+        id = currMouseClickGroup;
+    }
+    $.ajax({
+        url: url,
+        type: 'get',
+        data: "id="+id+"&name="+name,
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                setTimeout(function(){
+                    alert("修改成功!");
+                },0);
+                $("#changeName").modal();
+                if(type === 1 || type === "1"){
+                    initFriendList();
+                }else{
+                    initGroupList(socketHandle);
+                }
+            }else{
+                alert(returnData.message);
+            }
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
+}
+
+/**
+ * 删除分组
+ */
+function deleteSet(){
+    $.ajax({
+        url: "/friend/deleteSet",
+        type: 'get',
+        data: "id="+currMouseClickSet,
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                setTimeout(function(){
+                    alert("删除成功!");
+                },0);
+                $("#Name").modal();
+                initFriendList();
+            }else{
+                alert(returnData.message);
+            }
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
+}
+
+/**
+ * 刷新聊天记录
+ */
+function refreshRecord(){
+    console.log(userObj)
+    console.log(receiveUserObj);
+    $.ajax({
+        url: "/chatMessage/getMsgRecord",
+        type: 'get',
+        data: "from="+receiveUserObj.uId.match(/[0-9+]/)[0]+"&type="+receiveUserObj.type,
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (returnData) {
+            if(returnData.resultCode == 0){
+                var currArr = Array.from(returnData.resultObj);
+                currArr.forEach(function(item){
+                    renderMsgRecord(item);
+                });
+            }else{
+                alert(returnData.message);
+            }
+        },
+        error: function (returnData) {
+            console.log(returnData);
+        }
+    });
+}
+
