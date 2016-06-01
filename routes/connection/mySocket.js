@@ -53,7 +53,7 @@ mySocket.prototype.init = function(port){
         });
 
         /**
-         * 接收文本文件消息
+         * 接收并发送文本文件消息
          */
         socket.on("sendTextMsgToPersonal",function(data){
             if(data.to.uId!=""){
@@ -71,7 +71,7 @@ mySocket.prototype.init = function(port){
         });
 
         /**
-         * 接收图片文件消息
+         * 接收并发送图片文件消息
          */
         socket.on("sendImgMsgToPersonal",function(data){
             if(data.to.uId!=""){
@@ -90,7 +90,7 @@ mySocket.prototype.init = function(port){
         });
 
         /**
-         * 接收个人文件消息
+         * 接收并发送个人文件消息
          */
         socket.on("sendFileMsgToPersonal",function(data){
             //将消息插入到数据库

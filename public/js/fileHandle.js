@@ -80,7 +80,7 @@ FileHandle.prototype = {
             alert("对不起,您的浏览器暂不支持发送图片,请更新到最新版浏览器!");
             return;
         }
-        if(imgFile.type.indexOf("image")===-1){
+        if(imgFile.type.indexOf("image") === -1){
             alert("该文件不是图片!");
             return;
         }

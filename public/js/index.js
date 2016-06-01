@@ -6,14 +6,21 @@ var userObj = {
     nick:"",
     uId:"",
     picture : ""
-}
+};
 
 var receiveUserObj = {
     nick:"" ,
     uId:"" ,
     picture : "",
     type : "1"
-}
+};
+
+var clickUserObj = {
+    nick:"" ,
+    uId:"" ,
+    picture : "",
+    type : "1"
+};
 
 var socketHandle;
 
@@ -270,21 +277,33 @@ var currMouseClickUser;
 function mouseClickUser(t,e){
     var currEle = t;
     var mouseBtnNum = e.button;
+    clickUserObj.uId = $(currEle).attr("userId");
+    clickUserObj.nick = $(currEle).find("span").text();
+    clickUserObj.picture = $(currEle).find("img").attr("src");
+    clickUserObj.type = 1;
     if(mouseBtnNum == 0){
         //鼠标左键点击
-        $(currEle).addClass("active").siblings().removeClass("active");
-        receiveUserObj.uId = $(currEle).attr("userId");
-        receiveUserObj.nick = $(currEle).find("span").text();
-        receiveUserObj.picture = $(currEle).find("img").attr("src");
-        receiveUserObj.type = 1;
-        $("#myNicName").text("正在与"+receiveUserObj.nick+"聊天");
+        //$(currEle).addClass("active").siblings().removeClass("active");
+        //receiveUserObj.uId = $(currEle).attr("userId");
+        //receiveUserObj.nick = $(currEle).find("span").text();
+        //receiveUserObj.picture = $(currEle).find("img").attr("src");
+        //receiveUserObj.type = 1;
+        //$("#myNicName").text("正在与"+receiveUserObj.nick+"聊天");
+        //$('[receiveuser]').css({"display":"none"});
+        //$('[receiveuser="'+receiveUserObj.uId+'"]').css({"display":"block"});
+        receiveUserObj.uId = clickUserObj.uId;
+        receiveUserObj.nick = clickUserObj.nick;
+        receiveUserObj.picture = clickUserObj.picture;
+        receiveUserObj.type = clickUserObj.type;
+        sendFriendMsg();
+        $("#userTab").tabs('open', 0);
     }else if(mouseBtnNum == 1){
         //鼠标中键点击
 
     }else if(mouseBtnNum == 2){
         //鼠标右键点击
         //alert(e.x+"===="+ e.y);
-        currMouseClickUser = $(currEle).attr("userId").match(/[0-9]+/)[0];
+        currMouseClickUser = clickUserObj.uId.match(/[0-9]+/)[0];
         $("#friendRightClick").css({"left": e.x,"top": e.y,"display":"block"});
     }
     return true;
@@ -301,21 +320,29 @@ var currMouseClickGroupName;
 function mouseClickGroup(t,e){
     var currEle = t;
     var mouseBtnNum = e.button;
+    clickUserObj.uId = $(currEle).attr("groupId");
+    clickUserObj.nick = $(currEle).find("span").text();
+    clickUserObj.picture = "";
+    clickUserObj.type = 2;
     if(mouseBtnNum == 0){
+        //receiveUserObj.uId = $(currEle).attr("groupId");
+        //receiveUserObj.nick = $(currEle).find("span").text();
+        //receiveUserObj.picture = "";
+        //receiveUserObj.type = 2;
         //鼠标左键点击
-        $(currEle).addClass("active").siblings().removeClass("active");
-        receiveUserObj.uId = $(currEle).attr("groupId");
-        receiveUserObj.nick = $(currEle).find("span").text();
-        receiveUserObj.picture = "";
-        receiveUserObj.type = 2;
-        $("#myNicName").text("正在与 "+receiveUserObj.nick+" 聊天");
+        receiveUserObj.uId = clickUserObj.uId;
+        receiveUserObj.nick = clickUserObj.nick;
+        receiveUserObj.picture = clickUserObj.picture;
+        receiveUserObj.type = clickUserObj.type;
+        sendFriendMsg();
+        $("#userTab").tabs('open', 0);
     }else if(mouseBtnNum == 1){
         //鼠标中键点击
 
     }else if(mouseBtnNum == 2){
         //鼠标右键点击
-        currMouseClickGroup = $(currEle).attr("groupId").match(/[0-9]+/)[0];
-        currMouseClickGroupName = $(currEle).find("span").text();
+        currMouseClickGroup = clickUserObj.uId.match(/[0-9]+/)[0];
+        currMouseClickGroupName = clickUserObj.nick;
         $("#groupRightClick").css({"left": e.x,"top": e.y,"display":"block"});
     }
     return true;
@@ -519,11 +546,34 @@ function addSelectGroup(id){
     });
 }
 
+function addToMsgTab(data){
+    var ele = "";
+    if(data.type === 1 || data.type === "1"){
+        $(".messageList").find("[userId='"+data.uId+"']").remove();
+        ele += '<li class="" userId='+data.uId+' onclick="clickChatMsg(this)"> <img src="'+data.picture+'" alt="" class="am-circle"> <span>'+data.nick+'</span></li>'
+    }else{
+        $(".messageList").find("[groupId='"+data.uId+"']").remove();
+        ele += '<li class="am-animation-slide-bottom" groupId='+data.uId+' onclick="clickChatMsg(this)"> <i class="am-icon-group am-icon-fw"></i><span>'+data.nick+'</span></li>'
+    }
+    $(".messageList").prepend(ele);
+    if(data.type === 1 || data.type === "1"){
+        //$(".messageList").find("[userId='"+data.uId+"']").click();
+        $('.messageList [userId="'+data.uId+'"]').click()
+    }else{
+        $(".messageList [groupId='"+data.uId+"']").click();
+    }
+}
+
 /**
  * 发送消息(好友)
  */
 function sendFriendMsg(){
-
+    receiveUserObj.uId = clickUserObj.uId;
+    receiveUserObj.nick = clickUserObj.nick;
+    receiveUserObj.picture = clickUserObj.picture;
+    receiveUserObj.type = clickUserObj.type;
+    addToMsgTab(receiveUserObj);
+    $("#userTab").tabs('open', 0);
 }
 
 /**
@@ -646,8 +696,34 @@ function deleteFriend(){
  * 发送消息(群组)
  */
 function sendGroupMsg(){
-
+    receiveUserObj.uId = clickUserObj.uId;
+    receiveUserObj.nick = clickUserObj.nick;
+    receiveUserObj.picture = clickUserObj.picture;
+    receiveUserObj.type = clickUserObj.type;
+    addToMsgTab(receiveUserObj);
+    $("#userTab").tabs('open', 0);
 }
+
+/**
+ * 点击消息标签页用户
+ */
+function clickChatMsg(ele){
+
+
+    receiveUserObj.uId = $(ele).attr("userId");
+    receiveUserObj.nick = $(ele).find("span").text();
+    receiveUserObj.picture = $(ele).find("img").attr("src");
+    receiveUserObj.type = 1;
+
+    var userId = $(ele).attr("userId");
+    var groupId = $(ele).attr("groupId");
+    $(ele).addClass("active").siblings().removeClass("active");
+    $("#myNicName").text("正在与"+receiveUserObj.nick+"聊天");
+    $('[receiveuser]').css({"display":"none"});
+    $('[receiveuser="'+(userId || groupId)+'"]').css({"display":"block"});
+    console.log(userId,groupId);
+}
+
 
 /**
  * 退出群组
@@ -844,3 +920,11 @@ function refreshRecord(){
     });
 }
 
+/**
+ * 聊天记录下载
+ */
+function downloadChatRecord(){
+    var type = receiveUserObj.type;
+    var uId = receiveUserObj.uId;
+    window.open("http://127.0.0.1:3000/chatMessage/downloadRecord/"+(+receiveUserObj.type-1)+"/"+receiveUserObj.uId.match(/[0-9+]/)[0])
+}

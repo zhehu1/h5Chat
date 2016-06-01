@@ -23,7 +23,7 @@ function getSuccess(data){
 function getUnLogin(){
     return {
         resultCode : 2,
-        message : "用户未登录!",
+        message : "用户未登录!请登陆后再试!",
         resultObj:{}
     }
 }

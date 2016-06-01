@@ -75,7 +75,7 @@ router.get("/addFriend",function(req,res,next){
     var setId = req.query.setId || "";
     var id = "";
     if(typeof req.session.userObj == "undefined"){
-        res.send(ajaxResult.returnError("请登录后再试!"));
+        res.send(ajaxResult.unLogin());
         return;
     }
     id = req.session.userObj.id;

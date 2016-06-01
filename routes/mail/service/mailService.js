@@ -66,3 +66,39 @@ exports.sendForgetPwdMail = function(to,nickName,link,callback){
         }
     });
 }
+
+function renderMsgRecord(data){
+    var msg = JSON.parse(data.msg);
+    var currUserObj = msg.from;
+    var currReceiveObj = msg.to;
+    var isSend = currUserObj.uId === userObj.uId?false:true;
+    var type = data.type;
+    var isGroup = data.isGroup;
+    var html = "";
+    var tpl = "";
+    if(type === 1 || type === "1"){
+        if(isSend){
+            console.log("currReceiveObj",currReceiveObj)
+            html += '<div class="message left am-animation-slide-bottom"  receiveUser="'+receiveUserObj.uId+'"> <img src="'+currUserObj.picture+'" alt="" class="am-circle"/><div class="body">'+msg.msg+'</div></div>';
+        }else{
+            console.log("currUserObj",currUserObj)
+            html += '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><img src="'+currUserObj.picture+'" alt="" class="am-circle"/><div class="body">'+msg.msg+'</div></div>';
+        }
+    }else if(type === 2 || type === "2"){
+        if(isSend){
+            html += '<div class="message left am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"> <img src="'+currUserObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+msg.msg[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+        }else{
+            html += '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><img src="'+currUserObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+msg.msg[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+        }
+    }else{
+        if(isSend){
+            tpl = '<div class="message left am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><img src="'+currUserObj.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+        }else{
+            tpl = '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><img src="'+currUserObj.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+        }
+        html += Array.from(msg.msg).map(function(item){
+            return tpl.replace("{{linkPath}}",item.linkPath).replace("{{name}}",item.name);
+        }).join("");
+    }
+    $("#messageListBox").prepend(html);
+}

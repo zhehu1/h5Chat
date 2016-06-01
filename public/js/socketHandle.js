@@ -40,7 +40,7 @@ SocketHandle.prototype = {
         //接收上线通知
         this.socket.on('joinIn', function(data) {
             //连接到服务器后，显示昵称输入框
-            that.msgHandle.addFriend(data);
+            that.msgHandle.userLogin(data);
         });
 
         //接收服务器错误信息
