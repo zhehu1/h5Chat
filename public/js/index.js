@@ -505,11 +505,13 @@ function addSelect(id){
  * @param data
  */
 function renderSearchGroup(data){
-    var groupInfo = data;
+    var groupInfoArr = Array.from(data);
     var tmpHTML = "";
-    tmpHTML += '群组:&nbsp;&nbsp;&nbsp;&nbsp;<i class="am-icon-group am-icon-fw"></i>';
-    tmpHTML += '<span>'+groupInfo.groupName+'</span>';
-    tmpHTML += '<button class="am-btn am-btn-primary am-align-right" type="button" onclick="addSelectGroup(\''+groupInfo.groupId+'\')"><span class="am-icon-plus"></span></button>';
+    groupInfoArr.forEach(function(item){
+        tmpHTML += '<div style="height: 5rem;">群组:&nbsp;&nbsp;&nbsp;&nbsp;<i class="am-icon-group am-icon-fw"></i>';
+        tmpHTML += '<span>'+item.groupName+'(id:'+item.groupId+')</span>';
+        tmpHTML += '<button class="am-btn am-btn-primary am-align-right" type="button" onclick="addSelectGroup(\''+item.groupId+'\')"><span class="am-icon-plus"></span></button></div>';
+    });
     $(".searchResult").html(tmpHTML);
 }
 
@@ -708,20 +710,18 @@ function sendGroupMsg(){
  * 点击消息标签页用户
  */
 function clickChatMsg(ele){
-
-
-    receiveUserObj.uId = $(ele).attr("userId");
-    receiveUserObj.nick = $(ele).find("span").text();
-    receiveUserObj.picture = $(ele).find("img").attr("src");
-    receiveUserObj.type = 1;
-
     var userId = $(ele).attr("userId");
     var groupId = $(ele).attr("groupId");
+
+    receiveUserObj.uId = typeof userId!="undefined"?userId:groupId;
+    receiveUserObj.nick = $(ele).find("span").text();
+    receiveUserObj.picture = typeof userId!="undefined"!=""?$(ele).find("img").attr("src"):"";
+    receiveUserObj.type = typeof userId!="undefined"!=""?1:2;
+
     $(ele).addClass("active").siblings().removeClass("active");
     $("#myNicName").text("正在与"+receiveUserObj.nick+"聊天");
     $('[receiveuser]').css({"display":"none"});
     $('[receiveuser="'+(userId || groupId)+'"]').css({"display":"block"});
-    console.log(userId,groupId);
 }
 
 
@@ -894,8 +894,6 @@ function deleteSet(){
  * 刷新聊天记录
  */
 function refreshRecord(){
-    console.log(userObj)
-    console.log(receiveUserObj);
     $.ajax({
         url: "/chatMessage/getMsgRecord",
         type: 'get',

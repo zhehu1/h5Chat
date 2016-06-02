@@ -78,11 +78,11 @@ router.get("/searchGroupById",function(req,res,next){
         return;
     }
 
-    groupService.searchGroupById([searchId],function(code,data){
+    groupService.searchGroupById([searchId,"%"+searchId+"%"],function(code,data){
         if(code == 0){
-            res.send(ajaxResult.returnSuccess(data.resultObj));
+            res.send(ajaxResult.returnSuccess(Tool.toArray(data)));
         }else{
-            res.send(ajaxResult.returnError(data.message));
+            res.send(ajaxResult.returnError(data));
         }
     })
 })

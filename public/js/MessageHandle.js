@@ -58,14 +58,22 @@ MessageHandle.prototype = {
      * @param content
      * @param isSend
      */
-    addToMsgBox : function(content,isSend){
+    addToMsgBox : function(content,isSend,from){
         var html = "";
-        if(isSend){
-            html += '<div class="message left am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"> <img src="'+receiveUserObj.picture+'" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
+        var isCurrUser = typeof from == "undefined"?true:receiveUserObj.uId != from.uId?false:true;
+        if(isCurrUser){
+            if(isSend){
+                html += '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'"> <img src="'+from.picture+'" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
+            }else{
+                html += '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
+            }
         }else{
-            html += '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
+            if(isSend){
+                html += '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'" style="display: none"> <img src="'+from.picture+'" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
+            }else{
+                html += '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'" style="display: none"><img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body">'+content+'</div></div>';
+            }
         }
-        console.log(html);
         $("#messageListBox").append(html);
         $("#messageListBox").scrollTop(999999999);
     },
@@ -75,12 +83,21 @@ MessageHandle.prototype = {
      * @param content
      * @param isSend
      */
-    addImgToMsgBox : function(content,isSend){
+    addImgToMsgBox : function(content,isSend,from){
         var html = "";
-        if(isSend){
-            html += '<div class="message left am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"> <img src="'+receiveUserObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+content[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+        var isCurrUser = typeof from == "undefined"?true:receiveUserObj.uId != from.uId?false:true;
+        if(isCurrUser){
+            if(isSend){
+                html += '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'"> <img src="'+from.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+content[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+            }else{
+                html += '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+content[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+            }
         }else{
-            html += '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+content[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+            if(isSend){
+                html += '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'" style="display: none"> <img src="'+from.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+content[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+            }else{
+                html += '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'" style="display: none"><img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body"><img src="'+content[0].linkPath+'" style="width: 100%;max-width: 510px;height: auto;"</div></div>';
+            }
         }
         $("#messageListBox").append(html);
         $("#messageListBox").scrollTop(999999999);
@@ -91,16 +108,25 @@ MessageHandle.prototype = {
      * @param content
      * @param isSend
      */
-    addFileToMsgBox : function(content,isSend){
+    addFileToMsgBox : function(content,isSend,from){
         var html = "";
         var tpl = "";
-        if(isSend){
-            tpl = '<div class="message left am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+        var isCurrUser = typeof from == "undefined"?true:receiveUserObj.uId != from.uId?false:true;
+        if(isCurrUser){
+            if(isSend){
+                tpl = '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'"><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+            }else{
+                tpl = '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"> <div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+            }
         }else{
-            tpl = '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"> <div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+            if(isSend){
+                tpl = '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'" style="display: none"><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+            }else{
+                tpl = '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'" style="display: none"> <div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+            }
         }
         html += content.map(function(item){
-            return tpl.replace("{{linkPath}}",content.linkPath).replace("{{name}}",item.name);
+            return tpl.replace("{{linkPath}}",item.linkPath).replace("{{name}}",item.name);
         }).join("");
 
         $("#messageListBox").append(html);

@@ -27,11 +27,11 @@ SocketHandle.prototype = {
         this.socket.on(userObj.uId,function(data){
             if(data!==""){
                 if(data.type == "file"){
-                    that.msgHandle.addFileToMsgBox(data.data.msg,true);
+                    that.msgHandle.addFileToMsgBox(data.data.msg,true,data.data.from);
                 }else if(data.type == "img"){
-                    that.msgHandle.addImgToMsgBox(data.data.msg,true)
+                    that.msgHandle.addImgToMsgBox(data.data.msg,true,data.data.from)
                 }else{
-                    that.msgHandle.addToMsgBox(data.data.msg,true);
+                    that.msgHandle.addToMsgBox(data.data.msg,true,data.data.from);
                 }
 
             }
@@ -62,13 +62,14 @@ SocketHandle.prototype = {
         var that = this;
         arr.forEach(function(item){
             that.socket.on("groupId"+item.groupId,function(data){
+                console.log(data.data)
                 if(data!==""){
                     if(data.type == "file"){
-                        that.msgHandle.addFileToMsgBox(data.data.msg,true);
+                        that.msgHandle.addFileToMsgBox(data.data.msg,true,data.data.to);
                     }else if(data.type == "img"){
-                        that.msgHandle.addImgToMsgBox(data.data.msg,true)
+                        that.msgHandle.addImgToMsgBox(data.data.msg,true,data.data.to)
                     }else{
-                        that.msgHandle.addToMsgBox(data.data.msg,true);
+                        that.msgHandle.addToMsgBox(data.data.msg,true,data.data.to);
                     }
 
                 }

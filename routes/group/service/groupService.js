@@ -54,7 +54,7 @@ groupService.prototype.searchGroupById = function(params,cb){
             return;
         }
         if(data.code == 0){
-            if(data.affectedRows == 1){
+            if(data.affectedRows != 0){
                 cb(0,data);
             }else{
                 cb(1,"没有查询到该群组!");

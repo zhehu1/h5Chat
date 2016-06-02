@@ -86,11 +86,11 @@ function msgHandel(data){
     var time = new Date(data.time);
     var currStr = "";
     if(type == 1){
-        currStr = msg.from.nick+"(id:"+from+")  "+ time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate() + "\r\n"+emjoyHandel(msg.msg)+"\r\n";
+        currStr = msg.from.nick+"(id:"+from+")  "+ time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate() + " " + time.getHours() + ":"+time.getMinutes() + ":" + time.getSeconds() + "\r\n"+emjoyHandel(msg.msg)+"\r\n";
     }else if(type == 2){
-        currStr = msg.from.nick+"(id:"+from+")  "+ time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate() + "\r\n[图片](路径:"+msg.msg[0].linkPath+")\r\n";
+        currStr = msg.from.nick+"(id:"+from+")  "+ time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate() + " " + time.getHours() + ":"+time.getMinutes() + ":" + time.getSeconds() + "\r\n[图片](路径:"+msg.msg[0].linkPath+")\r\n";
     }else{
-        currStr = msg.from.nick+"(id:"+from+")  "+ time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate() + "\r\n";
+        currStr = msg.from.nick+"(id:"+from+")  "+ time.getFullYear()+"-"+(time.getMonth()+1)+"-"+time.getDate() + " " + time.getHours() + ":"+time.getMinutes() + ":" + time.getSeconds() + "\r\n";
         Array.from(msg.msg).forEach(function(item){
             currStr += "[文件](路径:"+item.linkPath+")\r\n";
         });
