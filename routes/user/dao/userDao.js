@@ -19,7 +19,6 @@ userDao.prototype.register = function(params,cb){
     sqlExec.exe(loginSQL.add,params,cb);
 };
 
-
 /**
  * 用户登录验证
  * @param params

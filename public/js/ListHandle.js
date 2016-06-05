@@ -50,9 +50,10 @@ listHandle.compileFriendList = function(data,setObj){
 listHandle.compileGroupList = function(data){
     var tmpHTML = "";
     var tmpArr = Array.from(data);
-
+    var isSelfGroup = "";
     tmpArr.forEach(function(item){
-       tmpHTML += '<li class="am-animation-slide-bottom" groupId=\'groupId'+item.groupId+'\' onmousedown="mouseClickGroup(this,event)"> <i class="am-icon-group am-icon-fw"></i><span>'+item.groupName+'</span></li>';
+        isSelfGroup = item.createBy == userObj.uId.match(/[0-9]+/)[0]?1:2;
+       tmpHTML += '<li class="am-animation-slide-bottom" groupId=\'groupId'+item.groupId+'\' onmousedown="mouseClickGroup(this,event)" isSelfGroup="'+isSelfGroup+'"> <i class="am-icon-group am-icon-fw"></i><span>'+item.groupName+'</span></li>';
     });
 
     return tmpHTML;

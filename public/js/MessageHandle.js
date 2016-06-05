@@ -114,15 +114,15 @@ MessageHandle.prototype = {
         var isCurrUser = typeof from == "undefined"?true:receiveUserObj.uId != from.uId?false:true;
         if(isCurrUser){
             if(isSend){
-                tpl = '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'"><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+                tpl = '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'"><img src="'+from.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
             }else{
-                tpl = '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"> <div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+                tpl = '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'"><img src="'+userObj.picture+'" alt="" class="am-circle"/> <div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
             }
         }else{
             if(isSend){
-                tpl = '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'" style="display: none"><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+                tpl = '<div class="message left am-animation-slide-bottom" receiveUser="'+from.uId+'" style="display: none"><img src="'+from.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
             }else{
-                tpl = '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'" style="display: none"> <div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
+                tpl = '<div class="message right am-animation-slide-bottom" receiveUser="'+receiveUserObj.uId+'" style="display: none"> <img src="'+userObj.picture+'" alt="" class="am-circle"/><div class="body">[文件]:<a href="{{linkPath}}" target="_blank">{{name}}</a></div></div>';
             }
         }
         html += content.map(function(item){

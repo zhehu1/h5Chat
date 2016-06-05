@@ -5,20 +5,20 @@ localStorage.setItem("userObj","");
 var userObj = {
     nick:"",
     uId:"",
-    picture : ""
+    picture : "/images/shuijiao.jpg",
 };
 
 var receiveUserObj = {
     nick:"" ,
     uId:"" ,
-    picture : "",
+    picture : "/images/shuijiao.jpg",
     type : "1"
 };
 
 var clickUserObj = {
     nick:"" ,
     uId:"" ,
-    picture : "",
+    picture : "/images/shuijiao.jpg",
     type : "1"
 };
 
@@ -343,6 +343,12 @@ function mouseClickGroup(t,e){
         //鼠标右键点击
         currMouseClickGroup = clickUserObj.uId.match(/[0-9]+/)[0];
         currMouseClickGroupName = clickUserObj.nick;
+        var isSelfGroup = $(currEle).attr("isSelfGroup");
+        if(isSelfGroup === "1" ||isSelfGroup === 1){
+            $($("#groupRightClick button")[1]).css({"display":"block"});
+        }else{
+            $($("#groupRightClick button")[1]).css({"display":"none"});
+        }
         $("#groupRightClick").css({"left": e.x,"top": e.y,"display":"block"});
     }
     return true;
@@ -548,7 +554,11 @@ function addSelectGroup(id){
     });
 }
 
-function addToMsgTab(data){
+/**
+ * 添加到消息列表
+ * @param data
+ */
+function addToMsgTab(data,active){
     var ele = "";
     if(data.type === 1 || data.type === "1"){
         $(".messageList").find("[userId='"+data.uId+"']").remove();
@@ -558,7 +568,7 @@ function addToMsgTab(data){
         ele += '<li class="am-animation-slide-bottom" groupId='+data.uId+' onclick="clickChatMsg(this)"> <i class="am-icon-group am-icon-fw"></i><span>'+data.nick+'</span></li>'
     }
     $(".messageList").prepend(ele);
-    if(data.type === 1 || data.type === "1"){
+    if(active && (data.type === 1 || data.type === "1")){
         //$(".messageList").find("[userId='"+data.uId+"']").click();
         $('.messageList [userId="'+data.uId+'"]').click()
     }else{
@@ -574,7 +584,7 @@ function sendFriendMsg(){
     receiveUserObj.nick = clickUserObj.nick;
     receiveUserObj.picture = clickUserObj.picture;
     receiveUserObj.type = clickUserObj.type;
-    addToMsgTab(receiveUserObj);
+    addToMsgTab(receiveUserObj,true);
     $("#userTab").tabs('open', 0);
 }
 
@@ -702,7 +712,7 @@ function sendGroupMsg(){
     receiveUserObj.nick = clickUserObj.nick;
     receiveUserObj.picture = clickUserObj.picture;
     receiveUserObj.type = clickUserObj.type;
-    addToMsgTab(receiveUserObj);
+    addToMsgTab(receiveUserObj,true);
     $("#userTab").tabs('open', 0);
 }
 
@@ -897,7 +907,7 @@ function refreshRecord(){
     $.ajax({
         url: "/chatMessage/getMsgRecord",
         type: 'get',
-        data: "from="+receiveUserObj.uId.match(/[0-9+]/)[0]+"&type="+receiveUserObj.type,
+        data: "from="+receiveUserObj.uId.match(/[0-9]+/)[0]+"&type="+receiveUserObj.type,
         async: true,
         cache: false,
         contentType: false,
@@ -924,5 +934,5 @@ function refreshRecord(){
 function downloadChatRecord(){
     var type = receiveUserObj.type;
     var uId = receiveUserObj.uId;
-    window.open("http://127.0.0.1:3000/chatMessage/downloadRecord/"+(+receiveUserObj.type-1)+"/"+receiveUserObj.uId.match(/[0-9+]/)[0])
+    window.open("http://127.0.0.1:3000/chatMessage/downloadRecord/"+(+receiveUserObj.type-1)+"/"+receiveUserObj.uId.match(/[0-9]+/)[0])
 }

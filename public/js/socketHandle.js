@@ -20,14 +20,18 @@ SocketHandle.prototype = {
         //连接提示
         this.socket.on('connect', function(data) {
             //连接到服务器后，显示昵称输入框
-            console.log("socket 连接成功");
+            //console.log("socket 连接成功");
         });
 
         //接收单对单消息
         this.socket.on(userObj.uId,function(data){
             if(data!==""){
+                console.log(data);
+                var from = data.data.from;
+                from.type = 1;
+                addToMsgTab(from,false);
                 if(data.type == "file"){
-                    that.msgHandle.addFileToMsgBox(data.data.msg,true,data.data.from);
+                    that.msgHandle.addFileToMsgBox(data.data.msg,true,from);
                 }else if(data.type == "img"){
                     that.msgHandle.addImgToMsgBox(data.data.msg,true,data.data.from)
                 }else{
@@ -62,8 +66,10 @@ SocketHandle.prototype = {
         var that = this;
         arr.forEach(function(item){
             that.socket.on("groupId"+item.groupId,function(data){
-                console.log(data.data)
                 if(data!==""){
+                    var to = data.data.to;
+                    to.type = 2;
+                    addToMsgTab(to,false);
                     if(data.type == "file"){
                         that.msgHandle.addFileToMsgBox(data.data.msg,true,data.data.to);
                     }else if(data.type == "img"){

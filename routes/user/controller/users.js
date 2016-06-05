@@ -135,6 +135,10 @@ router.get("/forgetPwd",function(req,res,next){
         }else{
             userService.getUserInfoByLoginName([loginName],function(data,dataObj){
                 if(code == 0){
+                    if(dataObj.email == "" || dataObj.email == null){
+                        res.send(ajaxResult.returnError("您的邮箱为空,无法通过邮件找回密码,请与管理员联系!"));
+                        return;
+                    }
                     mailService.sendForgetPwdMail(dataObj.email,dataObj.nickName,link,function(code,data){
                         if(code != 0){
                             res.send(ajaxResult.returnError("邮件发送失败,请稍后再试!"));

@@ -12,7 +12,7 @@ var forgetPwd = {
             +"left join HTML5Chat.chat_info as c "
             +"on b.userId = c.id "
             +"where a.groupId in (select groupId from HTML5Chat.chat_groupUser as d where d.userId = ?);",
-    queryNoMember : "SELECT a.groupId,a.groupName,b.role "
+    queryNoMember : "SELECT a.groupId,a.groupName,a.create_By as 'createBy',b.role "
                     +"FROM HTML5Chat.chat_group as a "
                     +"left join HTML5Chat.chat_groupUser as b "
                     +"on a.groupId = b.groupId "
