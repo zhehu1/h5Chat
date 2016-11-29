@@ -82,6 +82,7 @@
 1. 安装mysql 
 
 2. 设置用户，默认账户：root，密码：123456
+> 或在`routes\connection\mysqlPool.js`中修改
 
 3. 创建数据库`create database HTML5Chat;`
 
