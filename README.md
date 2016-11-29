@@ -77,41 +77,49 @@
 | 踢出群组 | 群管理员将群成员踢出群群组(强制退出)|
 | 退出群组 | 用户主动退出群组 | 
 
+## 安装数据库
+
+1. 安装mysql 
+
+2. 设置用户，默认账户：root，密码：123456
+
+3. 创建数据库`create database HTML5Chat;`
+
+4. `use HTML5Chat`
+
+5. 导入数据`source yourPath\HTML5Chat.sql`
 
 ## 运行方式：
 
-1.克隆仓库
+1. 克隆仓库
 ```
-git clone https://git.coding.net/vuji/HTML5Chat.git
+git clone https://github.com/vu-ji/h5Chat.git
 ```
 
-2.安装nodejs环境
+2. 安装nodejs环境
 
 地址：[http://nodejs.cn](http://nodejs.cn)
 
-3.全局安装gulp
+3. 全局安装gulp
 ```
 npm install --global gulp
 ```
 
-4.安装node_modules
+4. 安装node_modules
 ```
-cd HTML5Chat-master && npm install
-```
-
-6.使用gulp编译sass文件、压缩css、js等文件
-```
-gulp
+cd h5Chat && npm install
 ```
 
-7.运行项目
+5. 运行项目
 ```
 npm start
 ```
 
-8.查看运行结果
+6. 查看运行结果
 
 地址：[http://localhost:3000](http://localhost:3000)
+
+
 
 
 
