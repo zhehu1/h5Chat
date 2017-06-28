@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+const path = require('path');
+
+const Koa = require('koa');
+const logger = require('koa-logger')
+const app = new Koa();
+const router = require('../server/router');
+
+/**
+ * koa中间件 -- 静态资源
+ */
+var static = require('koa-static');
+app.use(static(path.join(__dirname, '../client/web')));
+
+/**
+ * koa中间件 -- 日志
+ */
+app.use(logger());
+
+/**
+ * koa中间件 -- 路由
+ */
+const res = require('../server/libs/res');
+app.use(router.routes())
+    .use(router.allowedMethods({
+        throw: true,
+        notImplemented: (ctx) => res.NotImplemented(ctx),
+        methodNotAllowed: (ctx) => res.MethodNotAllowed(ctx)
+    }));
+
+/**
+ * socket.io
+ */
+var server = require('http').createServer(app.callback());
+var io = require('socket.io')(server);
+
+io.on('connection', () => {
+    console.log('connection!');
+});
+
+server.listen(9000);
