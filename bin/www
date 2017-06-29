@@ -7,16 +7,32 @@ const logger = require('koa-logger')
 const app = new Koa();
 const router = require('../server/router');
 
+app.on('error', function(err,ctx){
+	console.log(err);
+}); 
+
 /**
  * koa中间件 -- 静态资源
  */
-var static = require('koa-static');
+const static = require('koa-static');
 app.use(static(path.join(__dirname, '../client/web')));
+
+/**
+ * koa中间件 -- 跨域
+ */
+const cors = require('kcors');
+app.use(cors());
 
 /**
  * koa中间件 -- 日志
  */
 app.use(logger());
+
+/**
+ * koa中间件 -- bodyparser
+ */
+var bodyParser = require('koa-bodyparser');
+app.use(bodyParser());
 
 /**
  * koa中间件 -- 路由
