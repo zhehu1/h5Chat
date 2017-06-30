@@ -9,7 +9,7 @@ class Connection {
             password        : '123456',
             database        : 'h5chat',
             connectionLimit :  20,
-            debug           :  true
+            debug           :  false
         });
     };
 

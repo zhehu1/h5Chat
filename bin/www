@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const path = require('path');
+var colors = require('colors');
 
 const Koa = require('koa');
 const logger = require('koa-logger')
@@ -8,7 +9,7 @@ const app = new Koa();
 const router = require('../server/router');
 
 app.on('error', function(err,ctx){
-	console.log(err);
+	console.log(err.toString().error);
 }); 
 
 /**
@@ -52,7 +53,9 @@ var server = require('http').createServer(app.callback());
 var io = require('socket.io')(server);
 
 io.on('connection', () => {
-    console.log('connection!');
+    console.log('connection!'.green);
 });
 
 server.listen(9000);
+
+console.log("The server listening on 9000".green);
