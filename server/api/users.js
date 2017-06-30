@@ -3,20 +3,31 @@ const conn = require('../conn/conn');
 class Users {
     constructor (conn) {}
 
+    getRouters () {
+        return {
+            '/users': {
+                'get': this.getUsersBaseInfo,
+                'post': this.updateUsersBaseInfo,
+                'put': this.addUsersBaseInfo,
+                'delete': this.delUsersBaseInfo
+            }
+        }
+    };
+
     /**
      * 新增用户
      */
-    addUsersBaseInfo (params) {
+    addUsersBaseInfo (ctx) {
         // `Account`, `Email`, `Pic`, `Tel`, `Career`, `Birthday`, `Company`, `Address`
         let arr = new Array(8);
-        arr[0] = params.Account || null;
-        arr[1] = params.Email || null;
-        arr[2] = params.Pic || null;
-        arr[3] = params.Tel || null;
-        arr[4] = params.Career || null;
-        arr[5] = params.Birthday || null;
-        arr[6] = params.Company || null;
-        arr[7] = params.Address || null;
+        arr[0] = ctx.query.Account || null;
+        arr[1] = ctx.query.Email || null;
+        arr[2] = ctx.query.Pic || null;
+        arr[3] = ctx.query.Tel || null;
+        arr[4] = ctx.query.Career || null;
+        arr[5] = ctx.query.Birthday || null;
+        arr[6] = ctx.query.Company || null;
+        arr[7] = ctx.query.Address || null;
         return new Promise((resolve, reject) => {
             conn.insert('call i_users_base_info(?, ?, ?, ?, ?, ?, ?, ?);', arr)
             .then((result) => {
@@ -28,9 +39,9 @@ class Users {
         })
     };
 
-    getUsersBaseInfo (Account) {
+    getUsersBaseInfo (ctx) {
         return new Promise((resolve, reject) => {
-            conn.query('select * from `users_base_info` where Account=?', Account)
+            conn.query('select * from `users_base_info` where Account=?', ctx.query.Account || '')
             .then((result) => {
                 resolve(result)
             })
@@ -40,7 +51,7 @@ class Users {
         })
     };
 
-    async updateUsersBaseInfo (ctx, next) {
+    updateUsersBaseInfo (ctx, next) {
         // `Account`, `Email`, `Pic`, `Tel`, `Career`, `Birthday`, `Company`, `Address`
         let params = new Array(8);
         debugger;
@@ -52,25 +63,29 @@ class Users {
         params[5] = ctx.request.body.Birthday || null;
         params[6] = ctx.request.body.Company || null;
         params[7] = ctx.request.body.Address || null;
-        await conn.update('call u_users_base_info(?, ?, ?, ?, ?, ?, ?, ?);', params)
-        .then((result) => {
-            res.Success(ctx, result);
-        })
-        .catch(err => {
-            res.BadRequest(ctx, err);
-        })
+        return new Promise((resolve, reject) => {
+            conn.update('call u_users_base_info(?, ?, ?, ?, ?, ?, ?, ?);', params)
+            .then((result) => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+        });
     };
 
-    async delUsersBaseInfo (ctx, next) {
-        await conn.delete('DELETE FROM `users_base_info` WHERE `Account`= ?;', ctx.query.Account)
-        .then((result) => {
-            res.Success(ctx, result);
-        })
-        .catch(err => {
-            res.BadRequest(ctx, err);
-        })
+    delUsersBaseInfo (ctx, next) {
+        return new Promise((resolve, reject) => {
+            conn.delete('DELETE FROM `users_base_info` WHERE `Account`= ?;', ctx.query.Account)
+            .then((result) => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+        });
     };
     
 }
 
-exports = module.exports = new Users();
+exports = module.exports = new Users().getRouters();

@@ -6,23 +6,17 @@ const router = new Router({
 
 const users = require('./api/users');
 
-router.put('/users', async(ctx, next) => {
-  try {
-    let result = await users.addUsersBaseInfo(ctx.query);
-    res.Success(ctx, result);
-  } catch (err) {
-    res.BadRequest(err);
+for (let o in users) {
+  for (let method in users[o]) {
+    router[method](o,async (ctx, next) => {
+      try {
+        let result = await users[o][method](ctx);
+        res.Success(ctx, result);
+      } catch (err) {
+        res.BadRequest(err);
+      }
+    });
   }
-});
-router.get('/users', async(ctx, next) => {
-  try {
-    let result = await users.getUsersBaseInfo(ctx.query.Account);
-    res.Success(ctx, result);
-  } catch (err) {
-    res.BadRequest(err);
-  }
-});
-router.post('/users', users.updateUsersBaseInfo);
-router.delete('/users', users.delUsersBaseInfo);
+}
 
 exports = module.exports = router;
