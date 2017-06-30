@@ -1,16 +1,9 @@
 const mysql = require('mysql');
+const conf = require('../config/mysql.json');
 
 class Connection {
     constructor() {
-        this.pool  = mysql.createPool({
-            host            : '127.0.0.1',
-            port            :  3306,
-            user            : 'root',
-            password        : '123456',
-            database        : 'h5chat',
-            connectionLimit :  20,
-            debug           :  false
-        });
+        this.pool  = mysql.createPool(conf);
     };
 
     query (sql, params) {
