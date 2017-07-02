@@ -12,7 +12,7 @@ const Products = ({ dispatch, products }) => {
   return (
     <div>
       <h2>List of Products</h2>
-      <ProductList onDelete={handleDelete} products={products}/>
+      <ProductList onDelete={handleDelete} products={products} />
     </div>
   );
 };
