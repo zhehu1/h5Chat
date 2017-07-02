@@ -41,6 +41,9 @@ class Users {
 
     getUsersBaseInfo (ctx) {
         return new Promise((resolve, reject) => {
+            if (!ctx.query.Account) {
+                reject('请输出参数!');
+            }
             conn.query('select * from `users_base_info` where Account=?', ctx.query.Account || '')
             .then((result) => {
                 resolve(result)
