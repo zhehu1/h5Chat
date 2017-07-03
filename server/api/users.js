@@ -5,12 +5,11 @@ class Users {
 
     getRouters () {
         return {
-            '/users': {
-                'get': this.getUsersBaseInfo,
-                'post': this.updateUsersBaseInfo,
-                'put': this.addUsersBaseInfo,
-                'delete': this.delUsersBaseInfo
-            }
+            'get:/users': this.getUsersBaseInfo,
+            'get:/userAll': this.getAllUsers,
+            'post:/users': this.updateUsersBaseInfo,
+            'put:/users': this.addUsersBaseInfo,
+            'delete:/users': this.delUsersBaseInfo
         }
     };
 
@@ -53,6 +52,18 @@ class Users {
             })
         })
     };
+
+    getAllUsers (ctx) {
+        return new Promise((resolve, reject) => {
+            conn.query('select * from `users_base_info` where 1=1')
+            .then((result) => {
+                resolve(result)
+            })
+            .catch(err => {
+                reject(err)
+            })
+        })
+    }
 
     updateUsersBaseInfo (ctx, next) {
         // `Account`, `Email`, `Pic`, `Tel`, `Career`, `Birthday`, `Company`, `Address`

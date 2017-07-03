@@ -6,10 +6,12 @@ import './index.css';
 
 const app = dva({
   initialState: {
-    products: [
-      { name: 'dva', id: 1 },
-      { name: 'antd', id: 2 },
-    ],
+    users: {
+        list: [
+          { id: 'dva', Account: 1, CreateTime: '123'},
+          { id: 'antd', Account: 2, CreateTime: '346'},
+        ]
+    }
   },
 });
 
@@ -17,8 +19,7 @@ const app = dva({
 // app.use({});
 
 // 3. Model
-app.model(require('./models/example'));
-app.model(require('./models/products'));
+app.model(require('./models/users'));
 
 // 4. Router
 app.router(require('./router'));

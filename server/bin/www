@@ -6,7 +6,7 @@ var colors = require('colors');
 const Koa = require('koa');
 const logger = require('koa-logger')
 const app = new Koa();
-const router = require('../server/router');
+const router = require('../router');
 
 app.on('error', function(err,ctx){
 	console.log(err.toString().error);
@@ -15,8 +15,8 @@ app.on('error', function(err,ctx){
 /**
  * koa中间件 -- 静态资源
  */
-const static = require('koa-static');
-app.use(static(path.join(__dirname, '../client/web')));
+// const static = require('koa-static');
+// app.use(static(path.join(__dirname, '../client/web')));
 
 /**
  * koa中间件 -- 跨域
@@ -38,7 +38,7 @@ app.use(bodyParser());
 /**
  * koa中间件 -- 路由
  */
-const res = require('../server/libs/res');
+const res = require('../libs/res');
 app.use(router.routes())
     .use(router.allowedMethods({
         throw: true,
