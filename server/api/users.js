@@ -30,10 +30,10 @@ class Users {
         return new Promise((resolve, reject) => {
             conn.insert('call i_users_base_info(?, ?, ?, ?, ?, ?, ?, ?);', arr)
             .then((result) => {
-                res.Success(ctx, result);
+                resolve(result)
             })
             .catch(err => {
-                res.BadRequest(ctx, err);
+                reject(err)
             })
         })
     };
