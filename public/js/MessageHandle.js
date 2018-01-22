@@ -59,6 +59,7 @@ MessageHandle.prototype = {
      * @param isSend
      */
     addToMsgBox : function(content,isSend,from){
+        console.log(content,isSend,from)
         var html = "";
         var isCurrUser = typeof from == "undefined"?true:receiveUserObj.uId != from.uId?false:true;
         if(isCurrUser){

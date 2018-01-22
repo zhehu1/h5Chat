@@ -70,6 +70,9 @@ SocketHandle.prototype = {
                     var to = data.data.to;
                     to.type = 2;
                     addToMsgTab(to,false);
+                    if (data.data.to.type === 2) {
+                        data.data.to.picture = data.data.from.picture;
+                    }
                     if(data.type == "file"){
                         that.msgHandle.addFileToMsgBox(data.data.msg,true,data.data.to);
                     }else if(data.type == "img"){

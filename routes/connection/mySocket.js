@@ -113,7 +113,6 @@ mySocket.prototype.init = function(port){
          */
         socket.on("sendTextMsgToGroup",function(data){
             if(data.to.uId!=""){
-
                 chatRecord.insertMsg([data.from.uId.match(getUidRegex)[0],data.to.uId.match(getUidRegex)[0],JSON.stringify(data),1,1],function(code,execData){
                     socket.broadcast.emit(data.to.uId, {
                         data: data,
