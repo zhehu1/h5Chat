@@ -3,12 +3,13 @@
  */
 var multiparty = require('multiparty');
 var util = require('util');
+var path = require('path');
 var fs = require('fs');
 var AjaxResilt = require("../../common/ajaxResult");
 var encode = require('../../common/encrypt');
 var ajaxResult = new AjaxResilt();
-var BASE_FILE_PATH = "public/files/";
-var BASE_USER_IMG_PATH = "public/userImg/";
+var BASE_FILE_PATH = path.resolve("public/files/");
+var BASE_USER_IMG_PATH = path.resolve("public/userImg/");
 var fileUploadService = function(){};
 
 fileUploadService.prototype.uploadFile = function(req,res,next){
@@ -69,7 +70,7 @@ fileUploadService.prototype.uploadImg = function(req,res,next){
             var returnArr = [];
             inputFile.forEach(function(item){
                 returnArr.push({
-                    linkPath:item.path.replace(BASE_USER_IMG_PATH,"/userImg/"),
+                    linkPath:item.path.replace(BASE_USER_IMG_PATH,"userImg/"),
                     name:item.originalFilename
                 })
             });
