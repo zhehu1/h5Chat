@@ -934,5 +934,5 @@ function refreshRecord(){
 function downloadChatRecord(){
     var type = receiveUserObj.type;
     var uId = receiveUserObj.uId;
-    window.open("http://127.0.0.1:3000/chatMessage/downloadRecord/"+(+receiveUserObj.type-1)+"/"+receiveUserObj.uId.match(/[0-9]+/)[0])
+    window.open(location.origin + "/chatMessage/downloadRecord/"+(+receiveUserObj.type-1)+"/"+receiveUserObj.uId.match(/[0-9]+/)[0])
 }
