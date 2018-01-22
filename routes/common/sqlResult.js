@@ -10,27 +10,36 @@ var sqlResult = function(){};
  * @returns {{code: number, message: string, affectedRows: number, resultObj: {}}}
  */
 function errHandle(err){
-    if(err.errno == 1062){
+    try {
+        if(err.errno == 1062){
+            return {
+                code : -1,
+                message : "主键重复,添加失败!",
+                affectedRows:0,
+                resultObj:{}
+            };
+        }
+        if(err.errno == 1451){
+            return {
+                code : -2,
+                message : "外键关联错误!",
+                affectedRows:0,
+                resultObj:{}
+            };
+        }
         return {
-            code : -1,
-            message : "主键重复,添加失败!",
+            code : -3,
+            message : "未知错误!",
             affectedRows:0,
             resultObj:{}
-        };
-    }
-    if(err.errno == 1451){
+        }   
+    } catch (e) {
         return {
-            code : -2,
-            message : "外键关联错误!",
+            code : -3,
+            message : "未知错误!",
             affectedRows:0,
             resultObj:{}
-        };
-    }
-    return {
-        code : -3,
-        message : "未知错误!",
-        affectedRows:0,
-        resultObj:{}
+        }   
     }
 }
 
@@ -40,36 +49,45 @@ function errHandle(err){
  * @returns {*}
  */
 function affectNo(data){
-    if(!Array.isArray(data)){
-        if(data.affectedRows == 0){
-            return {
-                code : 1,
-                message : "0行受到影响",
-                affectedRows:0,
-                resultObj:data
-            };
-        } else if(data.affectedRows == 1){
-            return {
-                code : 0,
-                message : "1行受到影响",
-                affectedRows:1,
-                resultObj:data
-            };
+    try {
+        if(!Array.isArray(data)){
+            if(data.affectedRows == 0){
+                return {
+                    code : 1,
+                    message : "0行受到影响",
+                    affectedRows:0,
+                    resultObj:data
+                };
+            } else if(data.affectedRows == 1){
+                return {
+                    code : 0,
+                    message : "1行受到影响",
+                    affectedRows:1,
+                    resultObj:data
+                };
+            }else{
+                return {
+                    code : 0,
+                    message : data.affectedRows+"行受到影响",
+                    affectedRows:data.affectedRows,
+                    resultObj:data
+                };
+            }
         }else{
             return {
                 code : 0,
-                message : data.affectedRows+"行受到影响",
-                affectedRows:data.affectedRows,
-                resultObj:data
+                message : "",
+                affectedRows:data.length,
+                resultObj:data.length == 1?data[0]:data
             };
-        }
-    }else{
+        }   
+    }catch(e) {
         return {
-            code : 0,
-            message : "",
-            affectedRows:data.length,
-            resultObj:data.length == 1?data[0]:data
-        };
+            code : -3,
+            message : "未知错误!",
+            affectedRows:0,
+            resultObj:{}
+        }
     }
 }
 
