@@ -26,6 +26,12 @@ function errHandle(err){
             resultObj:{}
         };
     }
+    return {
+        code : -3,
+        message : "未知错误!",
+        affectedRows:0,
+        resultObj:{}
+    }
 }
 
 /**
@@ -34,7 +40,7 @@ function errHandle(err){
  * @returns {*}
  */
 function affectNo(data){
-    if(typeof data.affectedRows != "undefined"){
+    if(!Array.isArray(data)){
         if(data.affectedRows == 0){
             return {
                 code : 1,

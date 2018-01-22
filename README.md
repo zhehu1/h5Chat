@@ -90,6 +90,29 @@
 
 5. 导入数据`source yourPath\HTML5Chat.sql`
 
+6. 添加触发器
+
+```sql
+DELIMITER $$
+
+CREATE 
+	TRIGGER `HTML5Chat`.`chat_group_AFTER_INSERT` AFTER INSERT 
+	ON `chat_group` 
+	FOR EACH ROW BEGIN
+		INSERT INTO chat_groupUser(groupId,userId,role) VALUE(new.groupId,new.create_by,0); 
+	END$$
+
+CREATE
+    TRIGGER `HTML5Chat`.`insert_into_login` AFTER INSERT
+    ON `HTML5Chat`.`chat_login`
+    FOR EACH ROW BEGIN
+	INSERT INTO chat_info(id,nickName,picture) VALUE(new.id,new.loginName,DEFAULT); 
+	INSERT INTO chat_friendSet(userId,setName,isDefault) VALUE(new.id,DEFAULT,0); 
+    END$$
+
+DELIMITER ;
+```
+
 ## 运行方式：
 
 1. 克隆仓库
